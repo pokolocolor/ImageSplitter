@@ -89,88 +89,91 @@ input[type=number] {
 #galleryHeader h2 { font-size:16px; font-weight:bold; }
 #saveCount { font-size:12px; color:#a6e3a1; }
 
-/* 스크롤 가능한 갤러리 */
+/* ── 갤러리 스크롤 영역 ── */
 #galleryScroll {
   flex:1;
   overflow-y:auto;
-  padding:12px;
   background:#181825;
   -webkit-overflow-scrolling:touch;
+  padding:0 0 12px 0;
 }
 
+/* ── 이미지 리스트 ── */
 #galleryList {
   display:flex;
   flex-direction:column;
-  gap:16px;
 }
 
-/* 각 타일 카드 */
-.tile-card {
-  background:#313244;
-  border-radius:14px;
-  overflow:hidden;
-  box-shadow:0 4px 12px #0004;
-  transition:transform .15s;
-}
-.tile-card:active { transform:scale(.98); }
-
-.tile-img-wrap {
-  width:100%;
+/* 각 이미지 아이템 */
+.img-item {
   position:relative;
-  background:#1e1e2e;
+  width:100%;
+  background:#000;
+  border-bottom:3px solid #181825;
+  cursor:pointer;
+  overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
 }
-.tile-img-wrap img {
+
+.img-item img {
   width:100%;
   height:auto;
   display:block;
+  transition:opacity .2s;
+}
+
+/* 번호 뱃지 */
+.img-num {
+  position:absolute;
+  top:10px; left:10px;
+  background:rgba(0,0,0,.7);
+  color:#fff;
+  font-size:15px;
+  font-weight:bold;
+  padding:4px 10px;
+  border-radius:6px;
+  pointer-events:none;
+  z-index:2;
+}
+
+/* 다운로드 힌트 */
+.img-hint {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  background:linear-gradient(transparent, rgba(0,0,0,.75));
+  color:#fff;
+  font-size:13px;
+  font-weight:bold;
+  text-align:center;
+  padding:24px 0 10px;
+  pointer-events:none;
+  z-index:2;
+  opacity:1;
+  transition:opacity .3s;
 }
 
 /* 저장됨 오버레이 */
-.tile-saved-overlay {
+.img-saved {
   display:none;
   position:absolute;
   inset:0;
-  background:rgba(39,174,96,.35);
+  background:rgba(39,174,96,.3);
   align-items:center;
   justify-content:center;
-  font-size:48px;
   pointer-events:none;
+  z-index:3;
 }
-.tile-card.saved .tile-saved-overlay { display:flex; }
-
-/* 하단 바 */
-.tile-bar {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:10px 14px;
-}
-.tile-label {
-  font-size:14px;
-  font-weight:bold;
-  color:#cdd6f4;
-}
-.tile-size {
-  font-size:11px;
-  color:#a6adc8;
-}
-.tile-save-btn {
-  background:#4a90d9;
+.img-saved span {
+  background:rgba(39,174,96,.9);
   color:#fff;
-  border:none;
-  border-radius:8px;
-  padding:8px 18px;
-  font-size:13px;
+  font-size:22px;
   font-weight:bold;
-  cursor:pointer;
-  font-family:inherit;
-  touch-action:manipulation;
-  transition:background .15s, transform .1s;
+  padding:10px 24px;
+  border-radius:50px;
 }
-.tile-save-btn:active  { background:#357abd; transform:scale(.95); }
-.tile-card.saved .tile-save-btn {
-  background:#27ae60;
-}
+.img-item.saved .img-saved  { display:flex; }
+.img-item.saved .img-hint   { opacity:0; }
+.img-item.saved img         { opacity:.75; }
 
 /* ── 하단 버튼 ── */
 #galleryBottom {
@@ -215,7 +218,7 @@ input[type=number] {
 
   <div id="galleryHeader">
     <h2>🖼️ 분할 결과</h2>
-    <span id="saveCount">0 / 0 저장됨</span>
+    <span id="saveCount">탭하면 저장돼요!</span>
   </div>
 
   <div id="galleryScroll">
@@ -382,28 +385,20 @@ function buildGallery(){
   list.innerHTML='';
 
   tiles.forEach((tile,i)=>{
-    const card=document.createElement('div');
-    card.className='tile-card';
-    card.id=`tile-${i}`;
-
-    card.innerHTML=`
-      <div class="tile-img-wrap">
-        <img src="${tile.url}" alt="${i+1}번">
-        <div class="tile-saved-overlay">✅</div>
-      </div>
-      <div class="tile-bar">
-        <div>
-          <div class="tile-label">${i+1}번</div>
-          <div class="tile-size">${tile.w} × ${tile.h} px</div>
-        </div>
-        <button class="tile-save-btn" onclick="downloadOne(${i})">⬇️ 저장</button>
-      </div>`;
-
-    list.appendChild(card);
+    const item=document.createElement('div');
+    item.className='img-item';
+    item.id=`img-${i}`;
+    item.innerHTML=`
+      <img src="${tile.url}" alt="${i+1}번">
+      <div class="img-num">${i+1}</div>
+      <div class="img-hint">⬇️ 탭해서 저장</div>
+      <div class="img-saved"><span>✅ 저장됨</span></div>
+    `;
+    item.addEventListener('click', ()=>downloadOne(i));
+    list.appendChild(item);
   });
 
   updateSaveCount();
-  // 맨 위로 스크롤
   document.getElementById('galleryScroll').scrollTop=0;
 }
 
@@ -413,11 +408,8 @@ function downloadOne(i){
   a.href=tiles[i].url;
   a.download=`${i+1}.png`;
   a.click();
-
   savedSet.add(i);
-  const card=document.getElementById(`tile-${i}`);
-  card.classList.add('saved');
-  card.querySelector('.tile-save-btn').textContent='✅ 저장됨';
+  document.getElementById(`img-${i}`).classList.add('saved');
   updateSaveCount();
 }
 
@@ -431,8 +423,12 @@ async function downloadAll(){
 
 // ── 저장 카운트 ───────────────────────────────────
 function updateSaveCount(){
+  const total=tiles.length;
+  const saved=savedSet.size;
   document.getElementById('saveCount').textContent=
-    `${savedSet.size} / ${tiles.length} 저장됨`;
+    saved===0 ? '탭하면 저장돼요!' :
+    saved===total ? '🎉 전체 저장 완료!' :
+    `${saved} / ${total} 저장됨`;
 }
 
 // ── 기타 ─────────────────────────────────────────
