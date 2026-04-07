@@ -20,7 +20,6 @@ body {
   user-select:none;
 }
 
-/* ── 툴바 ── */
 #toolbar {
   background:#313244;
   padding:10px 12px;
@@ -61,7 +60,6 @@ input[type=number] {
   text-align:center;
 }
 
-/* ── 캔버스 영역 ── */
 #canvasWrap {
   flex:1;
   display:flex;
@@ -94,7 +92,6 @@ input[type=number] {
 #overlay .icon { font-size:56px; }
 #overlay .txt  { font-size:16px; line-height:1.6; }
 
-/* ── 상태바 ── */
 #statusBar {
   background:#313244;
   padding:8px 14px;
@@ -104,81 +101,159 @@ input[type=number] {
   min-height:32px;
 }
 
-/* ── 저장 모달 ── */
+/* ── 모달 ── */
 #modal {
   display:none;
   position:fixed;
   inset:0;
-  background:#000a;
+  background:#000c;
   z-index:100;
-  align-items:center;
+  align-items:flex-end;
   justify-content:center;
 }
 #modal.show { display:flex; }
 
 #modalBox {
   background:#313244;
-  border-radius:16px;
-  padding:20px;
-  width:92%;
-  max-width:480px;
-  max-height:80dvh;
+  border-radius:20px 20px 0 0;
+  padding:20px 16px;
+  width:100%;
+  max-width:600px;
+  max-height:90dvh;
   display:flex;
   flex-direction:column;
+  gap:14px;
+}
+
+#modalHeader {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+#modalHeader h2 { font-size:17px; color:#cdd6f4; }
+#closeBtn {
+  background:#45475a;
+  border:none;
+  color:#cdd6f4;
+  font-size:18px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* 뷰어 */
+#viewer {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
   gap:12px;
-}
-
-#modalBox h2 { font-size:16px; color:#cdd6f4; text-align:center; }
-
-#imgGrid {
-  display:grid;
-  grid-template-columns:repeat(4, 1fr);
-  gap:6px;
-  overflow-y:auto;
   flex:1;
+  overflow:hidden;
 }
 
-.thumb-item {
-  position:relative;
-  border-radius:6px;
-  overflow:hidden;
-  background:#1e1e2e;
-  aspect-ratio:1;
-}
-.thumb-item img {
+#viewerImg {
   width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
+  max-height:45dvh;
+  object-fit:contain;
+  border-radius:12px;
+  background:#1e1e2e;
 }
-.thumb-num {
+
+/* 네비게이션 */
+#navRow {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  justify-content:center;
+}
+
+.nav-btn {
+  background:#45475a;
+  border:none;
+  color:#cdd6f4;
+  font-size:22px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  touch-action:manipulation;
+  flex-shrink:0;
+}
+.nav-btn:active { background:#585b70; }
+.nav-btn:disabled { opacity:.3; }
+
+#pageInfo {
+  font-size:16px;
+  font-weight:bold;
+  color:#cdd6f4;
+  min-width:70px;
+  text-align:center;
+}
+
+/* 썸네일 띠 */
+#thumbRow {
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  width:100%;
+  padding-bottom:4px;
+  scrollbar-width:none;
+}
+#thumbRow::-webkit-scrollbar { display:none; }
+
+.thumb {
+  flex-shrink:0;
+  width:52px;
+  height:52px;
+  border-radius:8px;
+  overflow:hidden;
+  border:2px solid transparent;
+  cursor:pointer;
+  position:relative;
+  background:#1e1e2e;
+}
+.thumb.active { border-color:#4a90d9; }
+.thumb img { width:100%; height:100%; object-fit:cover; }
+.thumb-n {
   position:absolute;
-  top:3px; left:3px;
+  top:2px; left:2px;
   background:#000a;
   color:#fff;
-  font-size:10px;
+  font-size:9px;
   font-weight:bold;
-  padding:1px 5px;
-  border-radius:4px;
+  padding:1px 4px;
+  border-radius:3px;
 }
-.thumb-dl {
-  position:absolute;
-  bottom:0; left:0; right:0;
-  background:#4a90d9cc;
-  color:#fff;
-  font-size:11px;
-  text-align:center;
-  padding:4px;
-  cursor:pointer;
-  font-weight:bold;
-}
-.thumb-dl:active { background:#4a90d9; }
 
-#modalBtns {
-  display:flex;
-  gap:8px;
+/* 저장 버튼 */
+#saveBtn {
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  border-radius:12px;
+  background:#4a90d9;
+  color:#fff;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+  touch-action:manipulation;
 }
-#modalBtns .btn { flex:1; text-align:center; font-size:14px; }
+#saveBtn:active { background:#357abd; }
+
+#saveHint {
+  font-size:11px;
+  color:#a6adc8;
+  text-align:center;
+  line-height:1.6;
+}
 </style>
 </head>
 <body>
@@ -187,15 +262,12 @@ input[type=number] {
 <div id="toolbar">
   <button class="btn btn-blue" onclick="openImage()">📂 열기</button>
   <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="loadImage(event)">
-
   <span class="lbl">열(가로):</span>
   <input type="number" id="cols" value="4" min="1" max="20">
-
   <span class="lbl">행(세로):</span>
   <input type="number" id="rows" value="5" min="1" max="20">
-
   <button class="btn btn-orange" onclick="resetLines()">🔄 초기화</button>
-  <button class="btn btn-red"    onclick="splitAndSave()">✂️ 분할 저장!</button>
+  <button class="btn btn-red"    onclick="splitAndSave()">✂️ 분할!</button>
 </div>
 
 <!-- 캔버스 -->
@@ -210,264 +282,249 @@ input[type=number] {
 <!-- 상태바 -->
 <div id="statusBar">준비 완료 — 이미지를 열어주세요!</div>
 
-<!-- 저장 모달 -->
+<!-- 모달 -->
 <div id="modal">
   <div id="modalBox">
-    <h2>💾 분할된 이미지 저장</h2>
-    <p style="font-size:12px;color:#a6adc8;text-align:center;">
-      각 이미지를 꾹 눌러서 저장하거나<br>아래 버튼으로 전체 다운로드하세요
-    </p>
-    <div id="imgGrid"></div>
-    <div id="modalBtns">
-      <button class="btn btn-blue"   onclick="downloadAll()">⬇️ 전체 다운로드</button>
-      <button class="btn btn-orange" onclick="closeModal()">✕ 닫기</button>
+
+    <div id="modalHeader">
+      <h2>💾 분할 이미지 저장</h2>
+      <button id="closeBtn" onclick="closeModal()">✕</button>
     </div>
+
+    <!-- 큰 이미지 뷰어 -->
+    <div id="viewer">
+      <img id="viewerImg" src="" alt="미리보기">
+
+      <!-- 이전 / 번호 / 다음 -->
+      <div id="navRow">
+        <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">‹</button>
+        <span id="pageInfo">1 / 20</span>
+        <button class="nav-btn" id="nextBtn" onclick="navigate(1)">›</button>
+      </div>
+
+      <!-- 썸네일 띠 -->
+      <div id="thumbRow"></div>
+    </div>
+
+    <!-- 저장 버튼 -->
+    <button id="saveBtn" onclick="saveCurrent()">⬇️ 이 사진 저장 (1번)</button>
+
+    <div id="saveHint">
+      📌 아이폰: Safari 브라우저에서 열면 사진첩에 바로 저장돼요!<br>
+      안드로이드: 다운로드 폴더 → 갤러리에서 확인하세요.
+    </div>
+
   </div>
 </div>
 
 <script>
-const canvas  = document.getElementById('mainCanvas');
-const ctx     = canvas.getContext('2d');
-const wrap    = document.getElementById('canvasWrap');
-const statusEl= document.getElementById('statusBar');
-const overlay = document.getElementById('overlay');
+const canvas   = document.getElementById('mainCanvas');
+const ctx      = canvas.getContext('2d');
+const wrap     = document.getElementById('canvasWrap');
+const statusEl = document.getElementById('statusBar');
+const overlay  = document.getElementById('overlay');
 
-let origImg = null;
-let scale   = 1;
-let offsetX = 0, offsetY = 0;
-let dispW   = 0, dispH   = 0;
-let hLines  = [];
-let vLines  = [];
-let dragging= null;
-const SNAP  = 18;  // 모바일용 넓은 터치 범위
-
-let tileDataURLs = [];  // 분할된 이미지 저장용
+let origImg = null, scale=1, offsetX=0, offsetY=0, dispW=0, dispH=0;
+let hLines=[], vLines=[], dragging=null;
+const SNAP=18;
+let tiles=[];       // DataURL 배열
+let currentIdx=0;  // 현재 보고있는 인덱스
 
 // ── 이미지 열기 ──────────────────────────────────
-function openImage() {
-  document.getElementById('fileInput').click();
-}
+function openImage(){ document.getElementById('fileInput').click(); }
 
-function loadImage(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  readFile(file);
-}
+function loadImage(e){ readFile(e.target.files[0]); }
 
-function readFile(file) {
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const img = new Image();
-    img.onload = () => {
-      origImg = img;
-      overlay.style.display = 'none';
-      fitCanvas();
-      resetLines();
+function readFile(file){
+  if(!file||!file.type.startsWith('image/')) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      origImg=img;
+      overlay.style.display='none';
+      fitCanvas(); resetLines();
       setStatus(`원본: ${img.width}×${img.height}px | 선을 드래그해서 조정하세요!`);
     };
-    img.src = ev.target.result;
+    img.src=ev.target.result;
   };
   reader.readAsDataURL(file);
 }
 
-// 드래그 앤 드롭 (PC)
-wrap.addEventListener('dragover', e => e.preventDefault());
-wrap.addEventListener('drop', e => {
+wrap.addEventListener('dragover',e=>e.preventDefault());
+wrap.addEventListener('drop',e=>{
   e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (file && file.type.startsWith('image/')) readFile(file);
+  readFile(e.dataTransfer.files[0]);
 });
 
-// ── 캔버스 맞추기 ────────────────────────────────
-function fitCanvas() {
-  const maxW = wrap.clientWidth  - 20;
-  const maxH = wrap.clientHeight - 20;
-  scale  = Math.min(maxW / origImg.width, maxH / origImg.height, 1);
-  dispW  = Math.floor(origImg.width  * scale);
-  dispH  = Math.floor(origImg.height * scale);
-  canvas.width  = wrap.clientWidth;
-  canvas.height = wrap.clientHeight;
-  offsetX = Math.floor((canvas.width  - dispW) / 2);
-  offsetY = Math.floor((canvas.height - dispH) / 2);
+// ── 캔버스 ───────────────────────────────────────
+function fitCanvas(){
+  const maxW=wrap.clientWidth-20, maxH=wrap.clientHeight-20;
+  scale=Math.min(maxW/origImg.width, maxH/origImg.height, 1);
+  dispW=Math.floor(origImg.width*scale);
+  dispH=Math.floor(origImg.height*scale);
+  canvas.width=wrap.clientWidth;
+  canvas.height=wrap.clientHeight;
+  offsetX=Math.floor((canvas.width-dispW)/2);
+  offsetY=Math.floor((canvas.height-dispH)/2);
 }
 
-// ── 선 초기화 ────────────────────────────────────
-function resetLines() {
-  if (!origImg) return;
-  const cols = parseInt(document.getElementById('cols').value) || 4;
-  const rows = parseInt(document.getElementById('rows').value) || 5;
-  vLines = Array.from({length:cols-1}, (_,i) => offsetX + Math.floor(dispW*(i+1)/cols));
-  hLines = Array.from({length:rows-1}, (_,i) => offsetY + Math.floor(dispH*(i+1)/rows));
+function resetLines(){
+  if(!origImg) return;
+  const cols=parseInt(document.getElementById('cols').value)||4;
+  const rows=parseInt(document.getElementById('rows').value)||5;
+  vLines=Array.from({length:cols-1},(_,i)=>offsetX+Math.floor(dispW*(i+1)/cols));
+  hLines=Array.from({length:rows-1},(_,i)=>offsetY+Math.floor(dispH*(i+1)/rows));
   redraw();
 }
 
-// ── 다시 그리기 ──────────────────────────────────
-function redraw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (origImg) ctx.drawImage(origImg, offsetX, offsetY, dispW, dispH);
-
-  ctx.strokeStyle='#ffffff'; ctx.lineWidth=1;
-  ctx.strokeRect(offsetX, offsetY, dispW, dispH);
-
+function redraw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(origImg) ctx.drawImage(origImg,offsetX,offsetY,dispW,dispH);
+  ctx.strokeStyle='#fff'; ctx.lineWidth=1;
+  ctx.strokeRect(offsetX,offsetY,dispW,dispH);
   ctx.lineWidth=2; ctx.setLineDash([8,4]);
-
   ctx.strokeStyle='#00cfff';
-  hLines.forEach(y => {
-    ctx.beginPath(); ctx.moveTo(offsetX,y); ctx.lineTo(offsetX+dispW,y); ctx.stroke();
-  });
-
+  hLines.forEach(y=>{ctx.beginPath();ctx.moveTo(offsetX,y);ctx.lineTo(offsetX+dispW,y);ctx.stroke();});
   ctx.strokeStyle='#ffdd00';
-  vLines.forEach(x => {
-    ctx.beginPath(); ctx.moveTo(x,offsetY); ctx.lineTo(x,offsetY+dispH); ctx.stroke();
-  });
-
+  vLines.forEach(x=>{ctx.beginPath();ctx.moveTo(x,offsetY);ctx.lineTo(x,offsetY+dispH);ctx.stroke();});
   ctx.setLineDash([]);
-
-  // 번호
-  const aY = [offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
-  const aX = [offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
+  const aY=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
+  const aX=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
   ctx.font='bold 13px "맑은 고딕"';
   ctx.textAlign='center'; ctx.textBaseline='middle';
   let n=1;
-  for(let r=0;r<aY.length-1;r++){
+  for(let r=0;r<aY.length-1;r++)
     for(let c=0;c<aX.length-1;c++){
       const mx=(aX[c]+aX[c+1])/2, my=(aY[r]+aY[r+1])/2;
       ctx.fillStyle='rgba(0,0,0,.6)';
       ctx.beginPath(); ctx.arc(mx,my,14,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#fff';
-      ctx.fillText(n++,mx,my);
+      ctx.fillStyle='#fff'; ctx.fillText(n++,mx,my);
     }
-  }
 }
 
-// ── 선 찾기 ──────────────────────────────────────
-function findLine(x, y) {
+// ── 선 드래그 ────────────────────────────────────
+function findLine(x,y){
   for(let i=0;i<hLines.length;i++) if(Math.abs(y-hLines[i])<SNAP) return{type:'h',index:i};
   for(let i=0;i<vLines.length;i++) if(Math.abs(x-vLines[i])<SNAP) return{type:'v',index:i};
   return null;
 }
-
-// ── 마우스 이벤트 ────────────────────────────────
-canvas.addEventListener('mousemove', e => {
-  const {x,y} = getPos(e);
-  if(dragging){
-    moveLine(x,y);
-  } else {
-    const f=findLine(x,y);
-    canvas.style.cursor=f?(f.type==='h'?'ns-resize':'ew-resize'):'crosshair';
-  }
-});
-canvas.addEventListener('mousedown',  e => { dragging=findLine(...getPosArr(e)); });
-canvas.addEventListener('mouseup',    () => dragging=null);
-canvas.addEventListener('mouseleave', () => dragging=null);
-
-// ── 터치 이벤트 ──────────────────────────────────
-canvas.addEventListener('touchstart', e => {
-  e.preventDefault();
-  const {x,y}=getPos(e.touches[0]);
-  dragging=findLine(x,y);
-}, {passive:false});
-
-canvas.addEventListener('touchmove', e => {
-  e.preventDefault();
-  const {x,y}=getPos(e.touches[0]);
-  if(dragging) moveLine(x,y);
-}, {passive:false});
-
-canvas.addEventListener('touchend', () => dragging=null);
-
-function getPos(e) {
-  const r=canvas.getBoundingClientRect();
-  return { x:e.clientX-r.left, y:e.clientY-r.top };
-}
-function getPosArr(e) {
-  const r=canvas.getBoundingClientRect();
-  return [e.clientX-r.left, e.clientY-r.top];
-}
 function moveLine(x,y){
+  if(!dragging) return;
   if(dragging.type==='h')
     hLines[dragging.index]=Math.max(offsetY+4,Math.min(y,offsetY+dispH-4));
   else
     vLines[dragging.index]=Math.max(offsetX+4,Math.min(x,offsetX+dispW-4));
   redraw();
 }
+function getXY(e){ const r=canvas.getBoundingClientRect(); return[e.clientX-r.left,e.clientY-r.top]; }
 
-// ── 분할 저장 ────────────────────────────────────
-function splitAndSave() {
+canvas.addEventListener('mousedown', e=>{ dragging=findLine(...getXY(e)); });
+canvas.addEventListener('mousemove', e=>{
+  const[x,y]=getXY(e);
+  if(dragging){ moveLine(x,y); return; }
+  const f=findLine(x,y);
+  canvas.style.cursor=f?(f.type==='h'?'ns-resize':'ew-resize'):'crosshair';
+});
+canvas.addEventListener('mouseup',   ()=>dragging=null);
+canvas.addEventListener('mouseleave',()=>dragging=null);
+
+canvas.addEventListener('touchstart',e=>{ e.preventDefault(); const t=e.touches[0],r=canvas.getBoundingClientRect(); dragging=findLine(t.clientX-r.left,t.clientY-r.top); },{passive:false});
+canvas.addEventListener('touchmove', e=>{ e.preventDefault(); const t=e.touches[0],r=canvas.getBoundingClientRect(); moveLine(t.clientX-r.left,t.clientY-r.top); },{passive:false});
+canvas.addEventListener('touchend',  ()=>dragging=null);
+
+// ── 분할 ─────────────────────────────────────────
+function splitAndSave(){
   if(!origImg){ alert('이미지를 먼저 열어주세요!'); return; }
-
-  const aY_c=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
-  const aX_c=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
-  const toOX=cx=>Math.round((cx-offsetX)/scale);
-  const toOY=cy=>Math.round((cy-offsetY)/scale);
-  const aY=aY_c.map(toOY), aX=aX_c.map(toOX);
-
+  const aYc=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
+  const aXc=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
+  const toX=cx=>Math.round((cx-offsetX)/scale);
+  const toY=cy=>Math.round((cy-offsetY)/scale);
+  const aY=aYc.map(toY), aX=aXc.map(toX);
   const tmp=document.createElement('canvas');
-  const tc =tmp.getContext('2d');
-  tileDataURLs=[];
-
+  const tc=tmp.getContext('2d');
+  tiles=[];
   for(let r=0;r<aY.length-1;r++){
     for(let c=0;c<aX.length-1;c++){
       const x=Math.max(0,aX[c]), y=Math.max(0,aY[r]);
-      const w=Math.min(origImg.width, aX[c+1])-x;
+      const w=Math.min(origImg.width,aX[c+1])-x;
       const h=Math.min(origImg.height,aY[r+1])-y;
       tmp.width=w; tmp.height=h;
       tc.clearRect(0,0,w,h);
       tc.drawImage(origImg,x,y,w,h,0,0,w,h);
-      tileDataURLs.push(tmp.toDataURL('image/png'));
+      tiles.push(tmp.toDataURL('image/png'));
     }
   }
-
+  currentIdx=0;
   openModal();
-  setStatus(`✅ ${tileDataURLs.length}장 분할 완료! 저장 모달을 확인하세요.`);
+  setStatus(`✅ ${tiles.length}장 분할 완료!`);
 }
 
 // ── 모달 ─────────────────────────────────────────
-function openModal() {
-  const grid=document.getElementById('imgGrid');
-  grid.innerHTML='';
-  tileDataURLs.forEach((url,i)=>{
-    const item=document.createElement('div');
-    item.className='thumb-item';
-    item.innerHTML=`
-      <img src="${url}" alt="${i+1}번">
-      <div class="thumb-num">${i+1}</div>
-      <div class="thumb-dl" onclick="downloadOne('${url}',${i+1})">저장</div>`;
-    grid.appendChild(item);
+function openModal(){
+  // 썸네일 생성
+  const thumbRow=document.getElementById('thumbRow');
+  thumbRow.innerHTML='';
+  tiles.forEach((url,i)=>{
+    const d=document.createElement('div');
+    d.className='thumb'+(i===0?' active':'');
+    d.id=`thumb-${i}`;
+    d.onclick=()=>goTo(i);
+    d.innerHTML=`<img src="${url}"><div class="thumb-n">${i+1}</div>`;
+    thumbRow.appendChild(d);
   });
+  updateViewer();
   document.getElementById('modal').classList.add('show');
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('show');
+function closeModal(){ document.getElementById('modal').classList.remove('show'); }
+
+function goTo(i){
+  currentIdx=i;
+  updateViewer();
+  // 썸네일 활성화
+  document.querySelectorAll('.thumb').forEach((t,idx)=>{
+    t.classList.toggle('active', idx===i);
+  });
+  // 썸네일 스크롤
+  const thumb=document.getElementById(`thumb-${i}`);
+  if(thumb) thumb.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
 }
 
-// ── 개별 다운로드 ─────────────────────────────────
-function downloadOne(url, num) {
+function navigate(dir){
+  const next=currentIdx+dir;
+  if(next<0||next>=tiles.length) return;
+  goTo(next);
+}
+
+function updateViewer(){
+  const total=tiles.length;
+  document.getElementById('viewerImg').src=tiles[currentIdx];
+  document.getElementById('pageInfo').textContent=`${currentIdx+1} / ${total}`;
+  document.getElementById('saveBtn').textContent=`⬇️ ${currentIdx+1}번 사진 저장`;
+  document.getElementById('prevBtn').disabled=currentIdx===0;
+  document.getElementById('nextBtn').disabled=currentIdx===total-1;
+}
+
+// ── 현재 사진 저장 ────────────────────────────────
+function saveCurrent(){
   const a=document.createElement('a');
-  a.href=url;
-  a.download=`${num}.png`;
+  a.href=tiles[currentIdx];
+  a.download=`${currentIdx+1}.png`;
   a.click();
-}
+  setStatus(`💾 ${currentIdx+1}번 저장! (${currentIdx+1}/${tiles.length})`);
 
-// ── 전체 다운로드 ─────────────────────────────────
-async function downloadAll() {
-  setStatus('다운로드 중...');
-  for(let i=0;i<tileDataURLs.length;i++){
-    downloadOne(tileDataURLs[i], i+1);
-    await new Promise(r=>setTimeout(r,300)); // 간격 두기
+  // 다음 장으로 자동 이동
+  if(currentIdx < tiles.length-1){
+    setTimeout(()=>navigate(1), 400);
+  } else {
+    setTimeout(()=>setStatus(`🎉 모든 사진 저장 완료!`), 400);
   }
-  setStatus(`✅ ${tileDataURLs.length}장 전체 다운로드 완료!`);
 }
 
-// ── 상태바 ───────────────────────────────────────
+// ── 기타 ─────────────────────────────────────────
 function setStatus(msg){ statusEl.textContent=msg; }
-
-// ── 리사이즈 대응 ─────────────────────────────────
-window.addEventListener('resize',()=>{
-  if(!origImg) return;
-  fitCanvas(); resetLines();
-});
+window.addEventListener('resize',()=>{ if(!origImg) return; fitCanvas(); resetLines(); });
 </script>
 </body>
 </html>
