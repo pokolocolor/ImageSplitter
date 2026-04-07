@@ -40,116 +40,148 @@ body {
   font-size:14px;
   font-weight:bold;
   cursor:pointer;
-  transition:opacity .15s,transform .1s;
+  transition:opacity .15s, transform .1s;
   touch-action:manipulation;
 }
-.btn:active{opacity:.7;transform:scale(.95);}
-.btn-blue  {background:#4a90d9;color:#fff;}
-.btn-orange{background:#e67e22;color:#fff;}
-.btn-red   {background:#e74c3c;color:#fff;}
-.btn-green {background:#27ae60;color:#fff;}
-.lbl{font-size:13px;color:#bac2de;white-space:nowrap;}
-input[type=number]{
-  width:46px;padding:8px 4px;border-radius:6px;
-  border:1px solid #555;background:#1e1e2e;
-  color:#cdd6f4;font-size:14px;text-align:center;
+.btn:active { opacity:.7; transform:scale(.95); }
+.btn-blue   { background:#4a90d9; color:#fff; }
+.btn-orange { background:#e67e22; color:#fff; }
+.btn-red    { background:#e74c3c; color:#fff; }
+.btn-green  { background:#27ae60; color:#fff; }
+.lbl { font-size:13px; color:#bac2de; white-space:nowrap; }
+input[type=number] {
+  width:46px; padding:8px 4px; border-radius:6px;
+  border:1px solid #555; background:#1e1e2e;
+  color:#cdd6f4; font-size:14px; text-align:center;
 }
 
 /* ── 캔버스 화면 ── */
 #screen-canvas {
-  flex:1;display:flex;flex-direction:column;overflow:hidden;
+  flex:1; display:flex; flex-direction:column; overflow:hidden;
 }
 #canvasWrap {
-  flex:1;display:flex;align-items:center;justify-content:center;
-  overflow:hidden;position:relative;background:#181825;touch-action:none;
+  flex:1; display:flex; align-items:center; justify-content:center;
+  overflow:hidden; position:relative; background:#181825; touch-action:none;
 }
-#mainCanvas{display:block;cursor:crosshair;touch-action:none;}
-#overlay{
-  position:absolute;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:14px;
-  color:#585b70;pointer-events:none;text-align:center;padding:20px;
+#mainCanvas { display:block; cursor:crosshair; touch-action:none; }
+#overlay {
+  position:absolute; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:14px;
+  color:#585b70; pointer-events:none; text-align:center; padding:20px;
 }
-#overlay .icon{font-size:56px;}
-#overlay .txt{font-size:16px;line-height:1.6;}
-#statusBar{
-  background:#313244;padding:8px 14px;font-size:12px;
-  color:#a6adc8;border-top:1px solid #45475a;min-height:32px;flex-shrink:0;
+#overlay .icon { font-size:56px; }
+#overlay .txt  { font-size:16px; line-height:1.6; }
+#statusBar {
+  background:#313244; padding:8px 14px; font-size:12px;
+  color:#a6adc8; border-top:1px solid #45475a; min-height:32px; flex-shrink:0;
 }
 
 /* ── 갤러리 화면 ── */
-#screen-gallery{
-  flex:1;display:none;flex-direction:column;overflow:hidden;
+#screen-gallery {
+  flex:1; display:none; flex-direction:column; overflow:hidden;
 }
-#galleryHeader{
-  background:#313244;padding:12px 16px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;box-shadow:0 2px 8px #0005;
-}
-#galleryHeader h2{font-size:16px;font-weight:bold;}
-#galleryHeader span{font-size:12px;color:#a6adc8;}
 
-#galleryGrid{
-  flex:1;overflow-y:auto;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:3px;
-  padding:3px;
+#galleryHeader {
+  background:#313244; padding:12px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-shrink:0; box-shadow:0 2px 8px #0005;
+}
+#galleryHeader h2 { font-size:16px; font-weight:bold; }
+#saveCount { font-size:12px; color:#a6e3a1; }
+
+/* 스크롤 가능한 갤러리 */
+#galleryScroll {
+  flex:1;
+  overflow-y:auto;
+  padding:12px;
   background:#181825;
-  align-content:start;
+  -webkit-overflow-scrolling:touch;
 }
 
-.tile-wrap{
-  position:relative;
-  aspect-ratio:1;
+#galleryList {
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+/* 각 타일 카드 */
+.tile-card {
   background:#313244;
-  border-radius:6px;
+  border-radius:14px;
   overflow:hidden;
-  cursor:pointer;
+  box-shadow:0 4px 12px #0004;
+  transition:transform .15s;
 }
-.tile-wrap img{
-  width:100%;height:100%;object-fit:cover;display:block;
-  transition:opacity .2s;
-}
-.tile-wrap:active img{opacity:.7;}
+.tile-card:active { transform:scale(.98); }
 
-/* 번호 뱃지 */
-.tile-num{
-  position:absolute;top:4px;left:4px;
-  background:rgba(0,0,0,.65);
-  color:#fff;font-size:11px;font-weight:bold;
-  padding:2px 6px;border-radius:4px;
-  pointer-events:none;
+.tile-img-wrap {
+  width:100%;
+  position:relative;
+  background:#1e1e2e;
+}
+.tile-img-wrap img {
+  width:100%;
+  height:auto;
+  display:block;
 }
 
-/* 저장됨 체크 */
-.tile-check{
+/* 저장됨 오버레이 */
+.tile-saved-overlay {
   display:none;
-  position:absolute;inset:0;
-  background:rgba(39,174,96,.45);
-  align-items:center;justify-content:center;
-  font-size:32px;
+  position:absolute;
+  inset:0;
+  background:rgba(39,174,96,.35);
+  align-items:center;
+  justify-content:center;
+  font-size:48px;
   pointer-events:none;
 }
-.tile-wrap.saved .tile-check{display:flex;}
+.tile-card.saved .tile-saved-overlay { display:flex; }
 
-/* 저장 버튼 오버레이 */
-.tile-dl{
-  position:absolute;bottom:0;left:0;right:0;
-  background:rgba(74,144,217,.88);
-  color:#fff;font-size:12px;font-weight:bold;
-  text-align:center;padding:5px;
-  opacity:0;transition:opacity .2s;
-  pointer-events:none;
+/* 하단 바 */
+.tile-bar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 14px;
 }
-.tile-wrap:hover .tile-dl{opacity:1;}
+.tile-label {
+  font-size:14px;
+  font-weight:bold;
+  color:#cdd6f4;
+}
+.tile-size {
+  font-size:11px;
+  color:#a6adc8;
+}
+.tile-save-btn {
+  background:#4a90d9;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  padding:8px 18px;
+  font-size:13px;
+  font-weight:bold;
+  cursor:pointer;
+  font-family:inherit;
+  touch-action:manipulation;
+  transition:background .15s, transform .1s;
+}
+.tile-save-btn:active  { background:#357abd; transform:scale(.95); }
+.tile-card.saved .tile-save-btn {
+  background:#27ae60;
+}
 
-#galleryBottom{
-  background:#313244;padding:10px 12px;
-  display:flex;gap:8px;flex-shrink:0;
+/* ── 하단 버튼 ── */
+#galleryBottom {
+  background:#313244;
+  padding:10px 12px;
+  display:flex;
+  gap:8px;
+  flex-shrink:0;
   border-top:1px solid #45475a;
 }
-#galleryBottom .btn{flex:1;text-align:center;font-size:14px;}
-#saveCount{font-size:12px;color:#a6e3a1;text-align:center;padding:4px 0;}
+#galleryBottom .btn { flex:1; text-align:center; }
 </style>
 </head>
 <body>
@@ -180,17 +212,21 @@ input[type=number]{
 
 <!-- 갤러리 화면 -->
 <div id="screen-gallery">
+
   <div id="galleryHeader">
     <h2>🖼️ 분할 결과</h2>
     <span id="saveCount">0 / 0 저장됨</span>
   </div>
 
-  <div id="galleryGrid"></div>
+  <div id="galleryScroll">
+    <div id="galleryList"></div>
+  </div>
 
   <div id="galleryBottom">
-    <button class="btn btn-blue"  onclick="showCanvas()">← 편집으로</button>
+    <button class="btn btn-blue"  onclick="showCanvas()">← 편집</button>
     <button class="btn btn-green" onclick="downloadAll()">⬇️ 전체 저장</button>
   </div>
+
 </div>
 
 <script>
@@ -231,7 +267,7 @@ wrap.addEventListener('drop',e=>{ e.preventDefault(); readFile(e.dataTransfer.fi
 // ── 캔버스 ───────────────────────────────────────
 function fitCanvas(){
   const maxW=wrap.clientWidth-20, maxH=wrap.clientHeight-20;
-  scale=Math.min(maxW/origImg.width, maxH/origImg.height, 1);
+  scale=Math.min(maxW/origImg.width, maxH/origImg.height,1);
   dispW=Math.floor(origImg.width*scale);
   dispH=Math.floor(origImg.height*scale);
   canvas.width=wrap.clientWidth;
@@ -252,25 +288,25 @@ function resetLines(){
 function redraw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   if(origImg) ctx.drawImage(origImg,offsetX,offsetY,dispW,dispH);
-  ctx.strokeStyle='#fff';ctx.lineWidth=1;
+  ctx.strokeStyle='#fff'; ctx.lineWidth=1;
   ctx.strokeRect(offsetX,offsetY,dispW,dispH);
-  ctx.lineWidth=2;ctx.setLineDash([8,4]);
+  ctx.lineWidth=2; ctx.setLineDash([8,4]);
   ctx.strokeStyle='#00cfff';
-  hLines.forEach(y=>{ctx.beginPath();ctx.moveTo(offsetX,y);ctx.lineTo(offsetX+dispW,y);ctx.stroke();});
+  hLines.forEach(y=>{ ctx.beginPath(); ctx.moveTo(offsetX,y); ctx.lineTo(offsetX+dispW,y); ctx.stroke(); });
   ctx.strokeStyle='#ffdd00';
-  vLines.forEach(x=>{ctx.beginPath();ctx.moveTo(x,offsetY);ctx.lineTo(x,offsetY+dispH);ctx.stroke();});
+  vLines.forEach(x=>{ ctx.beginPath(); ctx.moveTo(x,offsetY); ctx.lineTo(x,offsetY+dispH); ctx.stroke(); });
   ctx.setLineDash([]);
   const aY=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
   const aX=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
   ctx.font='bold 13px "맑은 고딕"';
-  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
   let n=1;
   for(let r=0;r<aY.length-1;r++)
     for(let c=0;c<aX.length-1;c++){
-      const mx=(aX[c]+aX[c+1])/2,my=(aY[r]+aY[r+1])/2;
+      const mx=(aX[c]+aX[c+1])/2, my=(aY[r]+aY[r+1])/2;
       ctx.fillStyle='rgba(0,0,0,.6)';
-      ctx.beginPath();ctx.arc(mx,my,14,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle='#fff';ctx.fillText(n++,mx,my);
+      ctx.beginPath(); ctx.arc(mx,my,14,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#fff'; ctx.fillText(n++,mx,my);
     }
 }
 
@@ -288,41 +324,41 @@ function moveLine(x,y){
     vLines[dragging.index]=Math.max(offsetX+4,Math.min(x,offsetX+dispW-4));
   redraw();
 }
-function getXY(e){const r=canvas.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
+function getXY(e){ const r=canvas.getBoundingClientRect(); return[e.clientX-r.left,e.clientY-r.top]; }
 
-canvas.addEventListener('mousedown', e=>{dragging=findLine(...getXY(e));});
+canvas.addEventListener('mousedown', e=>{ dragging=findLine(...getXY(e)); });
 canvas.addEventListener('mousemove', e=>{
   const[x,y]=getXY(e);
-  if(dragging){moveLine(x,y);return;}
+  if(dragging){ moveLine(x,y); return; }
   const f=findLine(x,y);
   canvas.style.cursor=f?(f.type==='h'?'ns-resize':'ew-resize'):'crosshair';
 });
 canvas.addEventListener('mouseup',   ()=>dragging=null);
 canvas.addEventListener('mouseleave',()=>dragging=null);
-canvas.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0],r=canvas.getBoundingClientRect();dragging=findLine(t.clientX-r.left,t.clientY-r.top);},{passive:false});
-canvas.addEventListener('touchmove', e=>{e.preventDefault();const t=e.touches[0],r=canvas.getBoundingClientRect();moveLine(t.clientX-r.left,t.clientY-r.top);},{passive:false});
+canvas.addEventListener('touchstart',e=>{ e.preventDefault(); const t=e.touches[0],r=canvas.getBoundingClientRect(); dragging=findLine(t.clientX-r.left,t.clientY-r.top); },{passive:false});
+canvas.addEventListener('touchmove', e=>{ e.preventDefault(); const t=e.touches[0],r=canvas.getBoundingClientRect(); moveLine(t.clientX-r.left,t.clientY-r.top); },{passive:false});
 canvas.addEventListener('touchend',  ()=>dragging=null);
 
 // ── 분할 ─────────────────────────────────────────
 function splitImage(){
-  if(!origImg){alert('이미지를 먼저 열어주세요!');return;}
+  if(!origImg){ alert('이미지를 먼저 열어주세요!'); return; }
   const aYc=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
   const aXc=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
   const toX=cx=>Math.round((cx-offsetX)/scale);
   const toY=cy=>Math.round((cy-offsetY)/scale);
-  const aY=aYc.map(toY),aX=aXc.map(toX);
+  const aY=aYc.map(toY), aX=aXc.map(toX);
   const tmp=document.createElement('canvas');
   const tc=tmp.getContext('2d');
   tiles=[];
   for(let r=0;r<aY.length-1;r++){
     for(let c=0;c<aX.length-1;c++){
-      const x=Math.max(0,aX[c]),y=Math.max(0,aY[r]);
+      const x=Math.max(0,aX[c]), y=Math.max(0,aY[r]);
       const w=Math.min(origImg.width,aX[c+1])-x;
       const h=Math.min(origImg.height,aY[r+1])-y;
-      tmp.width=w;tmp.height=h;
+      tmp.width=w; tmp.height=h;
       tc.clearRect(0,0,w,h);
       tc.drawImage(origImg,x,y,w,h,0,0,w,h);
-      tiles.push(tmp.toDataURL('image/png'));
+      tiles.push({ url:tmp.toDataURL('image/png'), w, h });
     }
   }
   savedSet=new Set();
@@ -342,39 +378,46 @@ function showGallery(){
 
 // ── 갤러리 빌드 ──────────────────────────────────
 function buildGallery(){
-  const grid=document.getElementById('galleryGrid');
-  grid.innerHTML='';
+  const list=document.getElementById('galleryList');
+  list.innerHTML='';
 
-  // 열 수에 맞게 그리드 조정
-  const cols=parseInt(document.getElementById('cols').value)||4;
-  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  tiles.forEach((tile,i)=>{
+    const card=document.createElement('div');
+    card.className='tile-card';
+    card.id=`tile-${i}`;
 
-  tiles.forEach((url,i)=>{
-    const wrap=document.createElement('div');
-    wrap.className='tile-wrap';
-    wrap.id=`tile-${i}`;
-    wrap.innerHTML=`
-      <img src="${url}" alt="${i+1}번">
-      <div class="tile-num">${i+1}</div>
-      <div class="tile-dl">⬇️ 저장</div>
-      <div class="tile-check">✅</div>`;
-    wrap.addEventListener('click',()=>downloadOne(i));
-    grid.appendChild(wrap);
+    card.innerHTML=`
+      <div class="tile-img-wrap">
+        <img src="${tile.url}" alt="${i+1}번">
+        <div class="tile-saved-overlay">✅</div>
+      </div>
+      <div class="tile-bar">
+        <div>
+          <div class="tile-label">${i+1}번</div>
+          <div class="tile-size">${tile.w} × ${tile.h} px</div>
+        </div>
+        <button class="tile-save-btn" onclick="downloadOne(${i})">⬇️ 저장</button>
+      </div>`;
+
+    list.appendChild(card);
   });
 
   updateSaveCount();
+  // 맨 위로 스크롤
+  document.getElementById('galleryScroll').scrollTop=0;
 }
 
 // ── 개별 저장 ─────────────────────────────────────
 function downloadOne(i){
   const a=document.createElement('a');
-  a.href=tiles[i];
+  a.href=tiles[i].url;
   a.download=`${i+1}.png`;
   a.click();
 
-  // 저장됨 표시
   savedSet.add(i);
-  document.getElementById(`tile-${i}`).classList.add('saved');
+  const card=document.getElementById(`tile-${i}`);
+  card.classList.add('saved');
+  card.querySelector('.tile-save-btn').textContent='✅ 저장됨';
   updateSaveCount();
 }
 
@@ -393,8 +436,8 @@ function updateSaveCount(){
 }
 
 // ── 기타 ─────────────────────────────────────────
-function setStatus(msg){statusEl.textContent=msg;}
-window.addEventListener('resize',()=>{if(!origImg)return;fitCanvas();resetLines();});
+function setStatus(msg){ statusEl.textContent=msg; }
+window.addEventListener('resize',()=>{ if(!origImg)return; fitCanvas(); resetLines(); });
 </script>
 </body>
 </html>
