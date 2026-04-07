@@ -2,161 +2,248 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>이미지 분할 저장기</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-  body {
-    background: #1e1e2e;
-    color: #cdd6f4;
-    font-family: "맑은 고딕", sans-serif;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
-  }
+body {
+  background:#1e1e2e;
+  color:#cdd6f4;
+  font-family:"맑은 고딕", "Apple SD Gothic Neo", sans-serif;
+  display:flex;
+  flex-direction:column;
+  height:100dvh;
+  overflow:hidden;
+  user-select:none;
+}
 
-  /* ── 툴바 ── */
-  #toolbar {
-    background: #313244;
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    box-shadow: 0 2px 8px #0005;
-    z-index: 10;
-  }
+/* ── 툴바 ── */
+#toolbar {
+  background:#313244;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  box-shadow:0 2px 8px #0005;
+  z-index:10;
+}
 
-  .btn {
-    padding: 6px 14px;
-    border: none;
-    border-radius: 6px;
-    font-family: "맑은 고딕", sans-serif;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: opacity .2s;
-  }
-  .btn:hover { opacity: .85; }
-  .btn-blue   { background: #4a90d9; color: #fff; }
-  .btn-orange { background: #e67e22; color: #fff; }
-  .btn-green  { background: #27ae60; color: #fff; }
-  .btn-red    { background: #e74c3c; color: #fff; }
+.btn {
+  padding:10px 14px;
+  border:none;
+  border-radius:8px;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:opacity .2s, transform .1s;
+  touch-action:manipulation;
+}
+.btn:active { opacity:.75; transform:scale(.96); }
+.btn-blue   { background:#4a90d9; color:#fff; }
+.btn-orange { background:#e67e22; color:#fff; }
+.btn-red    { background:#e74c3c; color:#fff; }
 
-  .label { font-size: 13px; color: #bac2de; }
+.lbl { font-size:13px; color:#bac2de; white-space:nowrap; }
 
-  input[type=number] {
-    width: 48px;
-    padding: 4px 6px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background: #1e1e2e;
-    color: #cdd6f4;
-    font-size: 13px;
-    text-align: center;
-  }
+input[type=number] {
+  width:46px;
+  padding:8px 4px;
+  border-radius:6px;
+  border:1px solid #555;
+  background:#1e1e2e;
+  color:#cdd6f4;
+  font-size:14px;
+  text-align:center;
+}
 
-  #folderLabel {
-    font-size: 12px;
-    color: #a6e3a1;
-    margin-left: 4px;
-  }
+/* ── 캔버스 영역 ── */
+#canvasWrap {
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+  background:#181825;
+  touch-action:none;
+}
 
-  /* ── 캔버스 영역 ── */
-  #canvasWrap {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-    background: #181825;
-  }
+#mainCanvas {
+  display:block;
+  cursor:crosshair;
+  touch-action:none;
+}
 
-  #mainCanvas {
-    display: block;
-    cursor: crosshair;
-    box-shadow: 0 0 24px #0008;
-  }
+#overlay {
+  position:absolute;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  color:#585b70;
+  pointer-events:none;
+  text-align:center;
+  padding:20px;
+}
+#overlay .icon { font-size:56px; }
+#overlay .txt  { font-size:16px; line-height:1.6; }
 
-  /* ── 상태바 ── */
-  #statusBar {
-    background: #313244;
-    padding: 5px 14px;
-    font-size: 12px;
-    color: #a6adc8;
-    border-top: 1px solid #45475a;
-  }
+/* ── 상태바 ── */
+#statusBar {
+  background:#313244;
+  padding:8px 14px;
+  font-size:12px;
+  color:#a6adc8;
+  border-top:1px solid #45475a;
+  min-height:32px;
+}
 
-  /* ── 안내 오버레이 ── */
-  #overlay {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    color: #585b70;
-    pointer-events: none;
-  }
-  #overlay .icon { font-size: 64px; }
-  #overlay .txt  { font-size: 18px; }
+/* ── 저장 모달 ── */
+#modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000a;
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+}
+#modal.show { display:flex; }
+
+#modalBox {
+  background:#313244;
+  border-radius:16px;
+  padding:20px;
+  width:92%;
+  max-width:480px;
+  max-height:80dvh;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+#modalBox h2 { font-size:16px; color:#cdd6f4; text-align:center; }
+
+#imgGrid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:6px;
+  overflow-y:auto;
+  flex:1;
+}
+
+.thumb-item {
+  position:relative;
+  border-radius:6px;
+  overflow:hidden;
+  background:#1e1e2e;
+  aspect-ratio:1;
+}
+.thumb-item img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.thumb-num {
+  position:absolute;
+  top:3px; left:3px;
+  background:#000a;
+  color:#fff;
+  font-size:10px;
+  font-weight:bold;
+  padding:1px 5px;
+  border-radius:4px;
+}
+.thumb-dl {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  background:#4a90d9cc;
+  color:#fff;
+  font-size:11px;
+  text-align:center;
+  padding:4px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.thumb-dl:active { background:#4a90d9; }
+
+#modalBtns {
+  display:flex;
+  gap:8px;
+}
+#modalBtns .btn { flex:1; text-align:center; font-size:14px; }
 </style>
 </head>
 <body>
 
 <!-- 툴바 -->
 <div id="toolbar">
-  <button class="btn btn-blue"   onclick="openImage()">📂 이미지 열기</button>
+  <button class="btn btn-blue" onclick="openImage()">📂 열기</button>
   <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="loadImage(event)">
 
-  <span class="label">가로(열):</span>
+  <span class="lbl">열(가로):</span>
   <input type="number" id="cols" value="4" min="1" max="20">
 
-  <span class="label">세로(행):</span>
+  <span class="lbl">행(세로):</span>
   <input type="number" id="rows" value="5" min="1" max="20">
 
-  <button class="btn btn-orange" onclick="resetLines()">🔄 선 초기화</button>
+  <button class="btn btn-orange" onclick="resetLines()">🔄 초기화</button>
   <button class="btn btn-red"    onclick="splitAndSave()">✂️ 분할 저장!</button>
-
-  <span id="folderLabel">← 이미지를 먼저 열어주세요</span>
 </div>
 
 <!-- 캔버스 -->
 <div id="canvasWrap">
   <div id="overlay">
     <div class="icon">🖼️</div>
-    <div class="txt">이미지를 열거나 여기에 드래그하세요</div>
+    <div class="txt">이미지를 열거나<br>여기에 드래그하세요</div>
   </div>
   <canvas id="mainCanvas"></canvas>
 </div>
 
 <!-- 상태바 -->
-<div id="statusBar" id="status">준비 완료 — 이미지를 열어주세요!</div>
+<div id="statusBar">준비 완료 — 이미지를 열어주세요!</div>
+
+<!-- 저장 모달 -->
+<div id="modal">
+  <div id="modalBox">
+    <h2>💾 분할된 이미지 저장</h2>
+    <p style="font-size:12px;color:#a6adc8;text-align:center;">
+      각 이미지를 꾹 눌러서 저장하거나<br>아래 버튼으로 전체 다운로드하세요
+    </p>
+    <div id="imgGrid"></div>
+    <div id="modalBtns">
+      <button class="btn btn-blue"   onclick="downloadAll()">⬇️ 전체 다운로드</button>
+      <button class="btn btn-orange" onclick="closeModal()">✕ 닫기</button>
+    </div>
+  </div>
+</div>
 
 <script>
-// ── 전역 변수 ─────────────────────────────────────
 const canvas  = document.getElementById('mainCanvas');
 const ctx     = canvas.getContext('2d');
 const wrap    = document.getElementById('canvasWrap');
-const status  = document.getElementById('statusBar');
+const statusEl= document.getElementById('statusBar');
 const overlay = document.getElementById('overlay');
 
-let origImg   = null;   // 원본 Image 객체
-let scale     = 1;      // 표시 축소 비율
-let offsetX   = 0;      // 캔버스 내 이미지 시작 X
-let offsetY   = 0;      // 캔버스 내 이미지 시작 Y
-let dispW     = 0;      // 표시 이미지 폭
-let dispH     = 0;      // 표시 이미지 높이
+let origImg = null;
+let scale   = 1;
+let offsetX = 0, offsetY = 0;
+let dispW   = 0, dispH   = 0;
+let hLines  = [];
+let vLines  = [];
+let dragging= null;
+const SNAP  = 18;  // 모바일용 넓은 터치 범위
 
-let hLines    = [];     // 가로선 y좌표 (캔버스 기준)
-let vLines    = [];     // 세로선 x좌표 (캔버스 기준)
+let tileDataURLs = [];  // 분할된 이미지 저장용
 
-let dragging  = null;   // { type:'h'|'v', index:n }
-const SNAP    = 10;     // 선 클릭 감지 범위(px)
-
-// ── 이미지 열기 ───────────────────────────────────
+// ── 이미지 열기 ──────────────────────────────────
 function openImage() {
   document.getElementById('fileInput').click();
 }
@@ -164,6 +251,10 @@ function openImage() {
 function loadImage(e) {
   const file = e.target.files[0];
   if (!file) return;
+  readFile(file);
+}
+
+function readFile(file) {
   const reader = new FileReader();
   reader.onload = ev => {
     const img = new Image();
@@ -172,39 +263,25 @@ function loadImage(e) {
       overlay.style.display = 'none';
       fitCanvas();
       resetLines();
-      setStatus(`원본 크기: ${img.width} × ${img.height}px  |  선을 드래그해서 위치를 조정하세요!`);
-      document.getElementById('folderLabel').textContent = '✅ 이미지 로드 완료!';
+      setStatus(`원본: ${img.width}×${img.height}px | 선을 드래그해서 조정하세요!`);
     };
     img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 }
 
-// 드래그 앤 드롭
+// 드래그 앤 드롭 (PC)
 wrap.addEventListener('dragover', e => e.preventDefault());
 wrap.addEventListener('drop', e => {
   e.preventDefault();
   const file = e.dataTransfer.files[0];
-  if (!file || !file.type.startsWith('image/')) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const img = new Image();
-    img.onload = () => {
-      origImg = img;
-      overlay.style.display = 'none';
-      fitCanvas();
-      resetLines();
-      setStatus(`원본 크기: ${img.width} × ${img.height}px  |  선을 드래그해서 위치를 조정하세요!`);
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
+  if (file && file.type.startsWith('image/')) readFile(file);
 });
 
-// ── 캔버스 크기 맞추기 ───────────────────────────
+// ── 캔버스 맞추기 ────────────────────────────────
 function fitCanvas() {
-  const maxW = wrap.clientWidth  - 40;
-  const maxH = wrap.clientHeight - 40;
+  const maxW = wrap.clientWidth  - 20;
+  const maxH = wrap.clientHeight - 20;
   scale  = Math.min(maxW / origImg.width, maxH / origImg.height, 1);
   dispW  = Math.floor(origImg.width  * scale);
   dispH  = Math.floor(origImg.height * scale);
@@ -214,207 +291,182 @@ function fitCanvas() {
   offsetY = Math.floor((canvas.height - dispH) / 2);
 }
 
-// ── 선 초기화 ─────────────────────────────────────
+// ── 선 초기화 ────────────────────────────────────
 function resetLines() {
   if (!origImg) return;
   const cols = parseInt(document.getElementById('cols').value) || 4;
   const rows = parseInt(document.getElementById('rows').value) || 5;
-
-  vLines = [];
-  for (let i = 1; i < cols; i++)
-    vLines.push(offsetX + Math.floor(dispW * i / cols));
-
-  hLines = [];
-  for (let i = 1; i < rows; i++)
-    hLines.push(offsetY + Math.floor(dispH * i / rows));
-
+  vLines = Array.from({length:cols-1}, (_,i) => offsetX + Math.floor(dispW*(i+1)/cols));
+  hLines = Array.from({length:rows-1}, (_,i) => offsetY + Math.floor(dispH*(i+1)/rows));
   redraw();
 }
 
-// ── 다시 그리기 ───────────────────────────────────
+// ── 다시 그리기 ──────────────────────────────────
 function redraw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (origImg) ctx.drawImage(origImg, offsetX, offsetY, dispW, dispH);
 
-  // 이미지
-  if (origImg)
-    ctx.drawImage(origImg, offsetX, offsetY, dispW, dispH);
-
-  // 이미지 테두리
-  ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth   = 1;
+  ctx.strokeStyle='#ffffff'; ctx.lineWidth=1;
   ctx.strokeRect(offsetX, offsetY, dispW, dispH);
 
-  const cols = vLines.length + 1;
+  ctx.lineWidth=2; ctx.setLineDash([8,4]);
 
-  // 가로선 (하늘색)
-  ctx.strokeStyle = '#00cfff';
-  ctx.lineWidth   = 2;
-  ctx.setLineDash([8, 4]);
+  ctx.strokeStyle='#00cfff';
   hLines.forEach(y => {
-    ctx.beginPath();
-    ctx.moveTo(offsetX, y);
-    ctx.lineTo(offsetX + dispW, y);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(offsetX,y); ctx.lineTo(offsetX+dispW,y); ctx.stroke();
   });
 
-  // 세로선 (노란색)
-  ctx.strokeStyle = '#ffdd00';
+  ctx.strokeStyle='#ffdd00';
   vLines.forEach(x => {
-    ctx.beginPath();
-    ctx.moveTo(x, offsetY);
-    ctx.lineTo(x, offsetY + dispH);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x,offsetY); ctx.lineTo(x,offsetY+dispH); ctx.stroke();
   });
 
   ctx.setLineDash([]);
 
-  // 번호 표시
-  const allY = [offsetY, ...hLines.slice().sort((a,b)=>a-b), offsetY + dispH];
-  const allX = [offsetX, ...vLines.slice().sort((a,b)=>a-b), offsetX + dispW];
-
-  ctx.font      = 'bold 13px "맑은 고딕"';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-
-  let num = 1;
-  for (let r = 0; r < allY.length - 1; r++) {
-    for (let c = 0; c < allX.length - 1; c++) {
-      const mx = (allX[c] + allX[c+1]) / 2;
-      const my = (allY[r] + allY[r+1]) / 2;
-
-      // 배경 원
-      ctx.fillStyle = 'rgba(0,0,0,0.55)';
-      ctx.beginPath();
-      ctx.arc(mx, my, 13, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(num++, mx, my);
+  // 번호
+  const aY = [offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
+  const aX = [offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
+  ctx.font='bold 13px "맑은 고딕"';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  let n=1;
+  for(let r=0;r<aY.length-1;r++){
+    for(let c=0;c<aX.length-1;c++){
+      const mx=(aX[c]+aX[c+1])/2, my=(aY[r]+aY[r+1])/2;
+      ctx.fillStyle='rgba(0,0,0,.6)';
+      ctx.beginPath(); ctx.arc(mx,my,14,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#fff';
+      ctx.fillText(n++,mx,my);
     }
   }
 }
 
-// ── 마우스 이벤트 ─────────────────────────────────
+// ── 선 찾기 ──────────────────────────────────────
 function findLine(x, y) {
-  for (let i = 0; i < hLines.length; i++)
-    if (Math.abs(y - hLines[i]) < SNAP) return { type:'h', index:i };
-  for (let i = 0; i < vLines.length; i++)
-    if (Math.abs(x - vLines[i]) < SNAP) return { type:'v', index:i };
+  for(let i=0;i<hLines.length;i++) if(Math.abs(y-hLines[i])<SNAP) return{type:'h',index:i};
+  for(let i=0;i<vLines.length;i++) if(Math.abs(x-vLines[i])<SNAP) return{type:'v',index:i};
   return null;
 }
 
+// ── 마우스 이벤트 ────────────────────────────────
 canvas.addEventListener('mousemove', e => {
-  const r = canvas.getBoundingClientRect();
-  const x = e.clientX - r.left;
-  const y = e.clientY - r.top;
-
-  if (dragging) {
-    if (dragging.type === 'h') {
-      hLines[dragging.index] = Math.max(offsetY + 4, Math.min(y, offsetY + dispH - 4));
-    } else {
-      vLines[dragging.index] = Math.max(offsetX + 4, Math.min(x, offsetX + dispW - 4));
-    }
-    redraw();
-    return;
+  const {x,y} = getPos(e);
+  if(dragging){
+    moveLine(x,y);
+  } else {
+    const f=findLine(x,y);
+    canvas.style.cursor=f?(f.type==='h'?'ns-resize':'ew-resize'):'crosshair';
   }
-
-  const found = findLine(x, y);
-  canvas.style.cursor = found
-    ? (found.type === 'h' ? 'ns-resize' : 'ew-resize')
-    : 'crosshair';
 });
+canvas.addEventListener('mousedown',  e => { dragging=findLine(...getPosArr(e)); });
+canvas.addEventListener('mouseup',    () => dragging=null);
+canvas.addEventListener('mouseleave', () => dragging=null);
 
-canvas.addEventListener('mousedown', e => {
-  const r = canvas.getBoundingClientRect();
-  const x = e.clientX - r.left;
-  const y = e.clientY - r.top;
-  dragging = findLine(x, y);
-});
+// ── 터치 이벤트 ──────────────────────────────────
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const {x,y}=getPos(e.touches[0]);
+  dragging=findLine(x,y);
+}, {passive:false});
 
-canvas.addEventListener('mouseup',    () => dragging = null);
-canvas.addEventListener('mouseleave', () => dragging = null);
-
-// ── 터치 지원 (모바일) ────────────────────────────
 canvas.addEventListener('touchmove', e => {
   e.preventDefault();
-  const r = canvas.getBoundingClientRect();
-  const t = e.touches[0];
-  const x = t.clientX - r.left;
-  const y = t.clientY - r.top;
-  if (dragging) {
-    if (dragging.type === 'h')
-      hLines[dragging.index] = Math.max(offsetY+4, Math.min(y, offsetY+dispH-4));
-    else
-      vLines[dragging.index] = Math.max(offsetX+4, Math.min(x, offsetX+dispW-4));
-    redraw();
-  }
-}, { passive: false });
+  const {x,y}=getPos(e.touches[0]);
+  if(dragging) moveLine(x,y);
+}, {passive:false});
 
-canvas.addEventListener('touchstart', e => {
-  const r = canvas.getBoundingClientRect();
-  const t = e.touches[0];
-  dragging = findLine(t.clientX - r.left, t.clientY - r.top);
-});
+canvas.addEventListener('touchend', () => dragging=null);
 
-canvas.addEventListener('touchend', () => dragging = null);
+function getPos(e) {
+  const r=canvas.getBoundingClientRect();
+  return { x:e.clientX-r.left, y:e.clientY-r.top };
+}
+function getPosArr(e) {
+  const r=canvas.getBoundingClientRect();
+  return [e.clientX-r.left, e.clientY-r.top];
+}
+function moveLine(x,y){
+  if(dragging.type==='h')
+    hLines[dragging.index]=Math.max(offsetY+4,Math.min(y,offsetY+dispH-4));
+  else
+    vLines[dragging.index]=Math.max(offsetX+4,Math.min(x,offsetX+dispW-4));
+  redraw();
+}
 
-// ── 분할 저장 ─────────────────────────────────────
+// ── 분할 저장 ────────────────────────────────────
 function splitAndSave() {
-  if (!origImg) {
-    alert('이미지를 먼저 열어주세요!');
-    return;
-  }
+  if(!origImg){ alert('이미지를 먼저 열어주세요!'); return; }
 
-  const allY_c = [offsetY, ...hLines.slice().sort((a,b)=>a-b), offsetY + dispH];
-  const allX_c = [offsetX, ...vLines.slice().sort((a,b)=>a-b), offsetX + dispW];
+  const aY_c=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
+  const aX_c=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
+  const toOX=cx=>Math.round((cx-offsetX)/scale);
+  const toOY=cy=>Math.round((cy-offsetY)/scale);
+  const aY=aY_c.map(toOY), aX=aX_c.map(toOX);
 
-  // 캔버스 → 원본 좌표 변환
-  const toOrigX = cx => Math.round((cx - offsetX) / scale);
-  const toOrigY = cy => Math.round((cy - offsetY) / scale);
+  const tmp=document.createElement('canvas');
+  const tc =tmp.getContext('2d');
+  tileDataURLs=[];
 
-  const allY = allY_c.map(toOrigY);
-  const allX = allX_c.map(toOrigX);
-
-  const tmpCanvas = document.createElement('canvas');
-  const tmpCtx    = tmpCanvas.getContext('2d');
-
-  let count = 1;
-  for (let r = 0; r < allY.length - 1; r++) {
-    for (let c = 0; c < allX.length - 1; c++) {
-      const x = Math.max(0, allX[c]);
-      const y = Math.max(0, allY[r]);
-      const w = Math.min(origImg.width,  allX[c+1]) - x;
-      const h = Math.min(origImg.height, allY[r+1]) - y;
-
-      tmpCanvas.width  = w;
-      tmpCanvas.height = h;
-      tmpCtx.clearRect(0, 0, w, h);
-      tmpCtx.drawImage(origImg, x, y, w, h, 0, 0, w, h);
-
-      const link = document.createElement('a');
-      link.download = `${count}.png`;
-      link.href     = tmpCanvas.toDataURL('image/png');
-      link.click();
-
-      count++;
+  for(let r=0;r<aY.length-1;r++){
+    for(let c=0;c<aX.length-1;c++){
+      const x=Math.max(0,aX[c]), y=Math.max(0,aY[r]);
+      const w=Math.min(origImg.width, aX[c+1])-x;
+      const h=Math.min(origImg.height,aY[r+1])-y;
+      tmp.width=w; tmp.height=h;
+      tc.clearRect(0,0,w,h);
+      tc.drawImage(origImg,x,y,w,h,0,0,w,h);
+      tileDataURLs.push(tmp.toDataURL('image/png'));
     }
   }
 
-  const total = (allY.length-1) * (allX.length-1);
-  setStatus(`✅ ${total}장 저장 완료! 다운로드 폴더를 확인하세요!`);
-  document.getElementById('folderLabel').textContent = `🎉 ${total}장 저장 완료!`;
+  openModal();
+  setStatus(`✅ ${tileDataURLs.length}장 분할 완료! 저장 모달을 확인하세요.`);
+}
+
+// ── 모달 ─────────────────────────────────────────
+function openModal() {
+  const grid=document.getElementById('imgGrid');
+  grid.innerHTML='';
+  tileDataURLs.forEach((url,i)=>{
+    const item=document.createElement('div');
+    item.className='thumb-item';
+    item.innerHTML=`
+      <img src="${url}" alt="${i+1}번">
+      <div class="thumb-num">${i+1}</div>
+      <div class="thumb-dl" onclick="downloadOne('${url}',${i+1})">저장</div>`;
+    grid.appendChild(item);
+  });
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+// ── 개별 다운로드 ─────────────────────────────────
+function downloadOne(url, num) {
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`${num}.png`;
+  a.click();
+}
+
+// ── 전체 다운로드 ─────────────────────────────────
+async function downloadAll() {
+  setStatus('다운로드 중...');
+  for(let i=0;i<tileDataURLs.length;i++){
+    downloadOne(tileDataURLs[i], i+1);
+    await new Promise(r=>setTimeout(r,300)); // 간격 두기
+  }
+  setStatus(`✅ ${tileDataURLs.length}장 전체 다운로드 완료!`);
 }
 
 // ── 상태바 ───────────────────────────────────────
-function setStatus(msg) {
-  status.textContent = msg;
-}
+function setStatus(msg){ statusEl.textContent=msg; }
 
-// ── 창 리사이즈 대응 ─────────────────────────────
-window.addEventListener('resize', () => {
-  if (!origImg) return;
-  fitCanvas();
-  resetLines();
+// ── 리사이즈 대응 ─────────────────────────────────
+window.addEventListener('resize',()=>{
+  if(!origImg) return;
+  fitCanvas(); resetLines();
 });
 </script>
 </body>
