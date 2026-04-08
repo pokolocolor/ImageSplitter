@@ -31,29 +31,16 @@ body {
 #topBar {
   background:var(--bar-bg);
   padding:6px 8px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
+  display:flex; flex-direction:column; gap:5px;
   box-shadow:0 2px 8px #0005;
-  z-index:10;
-  flex-shrink:0;
+  z-index:10; flex-shrink:0;
 }
-
-/* 1행: 열기 + 열/행 + 분할 */
 .top-row {
-  display:flex;
-  align-items:center;
-  gap:6px;
-  justify-content:center;
-  flex-wrap:nowrap;
+  display:flex; align-items:center; gap:6px;
+  justify-content:center; flex-wrap:nowrap;
 }
-
-/* 2행: 프리셋 */
 .preset-row {
-  display:flex;
-  align-items:center;
-  gap:5px;
-  justify-content:center;
+  display:flex; align-items:center; gap:5px; justify-content:center;
 }
 
 /* ── 버튼 ── */
@@ -82,14 +69,16 @@ body {
   box-shadow:0 0 6px rgba(162,155,254,.4);
 }
 
+/* ── ◀▶ 미니 버튼 ── */
 .btn-sm {
-  min-width:30px; min-height:30px; padding:0;
-  border:none; border-radius:6px;
+  width:22px; height:22px; padding:0;
+  border:none; border-radius:5px;
   background:var(--border); color:var(--text);
-  font-size:13px; font-weight:bold;
+  font-size:10px; line-height:1;
   cursor:pointer; display:flex;
   align-items:center; justify-content:center;
   touch-action:manipulation;
+  flex-shrink:0;
 }
 .btn-sm:active { background:#585b70; }
 
@@ -98,19 +87,19 @@ body {
 /* ── 숫자 컨트롤 ── */
 .num-control {
   display:flex; align-items:center; gap:2px;
-  background:var(--bg-deep); border-radius:8px;
+  background:var(--bg-deep); border-radius:7px;
   padding:2px 3px; border:1px solid #555;
 }
 .num-control input[type=number] {
-  width:28px; padding:2px 0; border:none; border-radius:4px;
+  width:24px; padding:1px 0; border:none; border-radius:4px;
   background:transparent; color:var(--text);
-  font-size:15px; font-weight:700; text-align:center;
+  font-size:14px; font-weight:700; text-align:center;
   font-family:inherit; -moz-appearance:textfield;
 }
 .num-control input::-webkit-outer-spin-button,
 .num-control input::-webkit-inner-spin-button { -webkit-appearance:none; }
 
-.sep { width:1px; height:24px; background:var(--border); flex-shrink:0; }
+.sep { width:1px; height:22px; background:var(--border); flex-shrink:0; }
 
 /* ── 캔버스 화면 ── */
 #screen-canvas { flex:1; display:flex; flex-direction:column; overflow:hidden; min-height:0; }
@@ -147,7 +136,6 @@ body {
   flex:1; overflow-y:auto; background:var(--bg-dark);
   -webkit-overflow-scrolling:touch; padding:8px; min-height:0;
 }
-
 #galleryGrid { display:grid; gap:4px; width:100%; }
 
 .img-item {
@@ -196,28 +184,25 @@ body {
 #galleryBottom .btn { flex:1; text-align:center; }
 
 /* ══ 반응형 ══ */
-
-/* 소형 모바일 ≤360 */
 @media (max-width:360px) {
-  #topBar { padding:5px 5px; gap:4px; }
+  #topBar { padding:4px 5px; gap:4px; }
   .top-row { gap:4px; }
-  .preset-row { gap:4px; }
-  .btn { padding:6px 9px; font-size:12px; }
+  .preset-row { gap:3px; }
+  .btn { padding:6px 8px; font-size:12px; }
   .btn-preset { padding:5px 9px; font-size:11px; }
-  .btn-sm { min-width:26px; min-height:26px; font-size:12px; }
-  .num-control input[type=number] { width:24px; font-size:14px; }
+  .btn-sm { width:20px; height:20px; font-size:9px; }
+  .num-control input[type=number] { width:22px; font-size:13px; }
   .lbl { font-size:11px; }
 }
 
-/* 태블릿+ 601px~ */
 @media (min-width:601px) {
   #topBar { padding:10px 16px; gap:8px; }
   .top-row { gap:10px; }
   .preset-row { gap:8px; }
   .btn { padding:10px 18px; font-size:15px; }
   .btn-preset { padding:8px 16px; font-size:14px; }
-  .btn-sm { min-width:34px; min-height:34px; font-size:15px; }
-  .num-control input[type=number] { width:34px; font-size:17px; }
+  .btn-sm { width:28px; height:28px; font-size:12px; }
+  .num-control input[type=number] { width:30px; font-size:16px; }
   .lbl { font-size:13px; }
   #galleryScroll { padding:14px; }
   #galleryGrid { gap:6px; }
@@ -229,20 +214,18 @@ body {
   #galleryHeader h2 { font-size:16px; }
 }
 
-/* 데스크톱 1024px~ */
 @media (min-width:1024px) {
   #galleryScroll { padding:20px; max-width:1100px; margin:0 auto; width:100%; }
   #galleryGrid { gap:8px; }
 }
 
-/* 가로모드 모바일 */
 @media (max-height:400px) and (orientation:landscape) {
-  #topBar { padding:4px 8px; gap:3px; flex-direction:row; flex-wrap:wrap; align-items:center; justify-content:center; }
-  .top-row, .preset-row { gap:4px; }
+  #topBar { padding:3px 8px; gap:3px; flex-direction:row; flex-wrap:wrap; align-items:center; justify-content:center; }
+  .top-row,.preset-row { gap:4px; }
   .btn { padding:5px 8px; font-size:11px; }
   .btn-preset { padding:4px 8px; font-size:10px; }
-  .btn-sm { min-width:24px; min-height:24px; font-size:11px; }
-  .num-control input[type=number] { font-size:13px; }
+  .btn-sm { width:18px; height:18px; font-size:8px; }
+  .num-control input[type=number] { font-size:12px; }
   .lbl { font-size:10px; }
   #statusBar { padding:4px 8px; font-size:10px; }
   #galleryHeader { padding:6px 10px; }
@@ -252,7 +235,6 @@ body {
 </head>
 <body>
 
-<!-- ── 통합 상단바 ── -->
 <div id="topBar">
   <div class="top-row">
     <button class="btn btn-blue" onclick="openImage()">📂 열기</button>
@@ -282,7 +264,6 @@ body {
   </div>
 </div>
 
-<!-- ── 캔버스 화면 ── -->
 <div id="screen-canvas">
   <div id="canvasWrap">
     <div id="overlay">
@@ -294,7 +275,6 @@ body {
   <div id="statusBar">준비 완료 — 이미지를 열어주세요!</div>
 </div>
 
-<!-- ── 갤러리 화면 ── -->
 <div id="screen-gallery">
   <div id="galleryHeader">
     <h2>🖼️ 분할 결과</h2>
@@ -329,13 +309,11 @@ function applyPreset(btn){
   btn.classList.add('active');
   resetLines();
 }
-
 function adjustVal(id,delta){
   const inp=document.getElementById(id);
   inp.value=Math.max(1,Math.min(20,(parseInt(inp.value)||1)+delta));
-  syncPreset(); resetLines();
+  syncPreset();resetLines();
 }
-
 function syncPreset(){
   const c=parseInt(document.getElementById('cols').value)||0;
   const r=parseInt(document.getElementById('rows').value)||0;
@@ -353,8 +331,8 @@ function readFile(file){
   reader.onload=ev=>{
     const img=new Image();
     img.onload=()=>{
-      origImg=img; overlay.style.display='none';
-      fitCanvas(); resetLines();
+      origImg=img;overlay.style.display='none';
+      fitCanvas();resetLines();
       setStatus(`${img.width}×${img.height}px — 선을 드래그해서 조정!`);
     };
     img.src=ev.target.result;
@@ -375,7 +353,6 @@ function fitCanvas(){
   offsetX=Math.floor((canvas.width-dispW)/2);
   offsetY=Math.floor((canvas.height-dispH)/2);
 }
-
 function resetLines(){
   if(!origImg)return;
   const cols=parseInt(document.getElementById('cols').value)||4;
@@ -384,7 +361,6 @@ function resetLines(){
   hLines=Array.from({length:rows-1},(_,i)=>offsetY+Math.floor(dispH*(i+1)/rows));
   redraw();
 }
-
 function redraw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   if(!origImg)return;
@@ -400,7 +376,6 @@ function redraw(){
   const aY=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
   const aX=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
   const fs=Math.max(9,Math.min(13,Math.min(dispW/aX.length/3,dispH/aY.length/3)));
-  const rad=fs*1.1;
   ctx.font=`bold ${fs}px sans-serif`;
   ctx.textAlign='center';ctx.textBaseline='middle';
   let n=1;
@@ -408,7 +383,7 @@ function redraw(){
     for(let c=0;c<aX.length-1;c++){
       const mx=(aX[c]+aX[c+1])/2,my=(aY[r]+aY[r+1])/2;
       ctx.fillStyle='rgba(0,0,0,.55)';
-      ctx.beginPath();ctx.arc(mx,my,rad,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(mx,my,fs*1.1,0,Math.PI*2);ctx.fill();
       ctx.fillStyle='#fff';ctx.fillText(n++,mx,my);
     }
 }
@@ -459,7 +434,7 @@ function splitImage(){
   const tmp=document.createElement('canvas');
   const tc=tmp.getContext('2d');
   tiles=[];
-  for(let r=0;r<aY.length-1;r++){
+  for(let r=0;r<aY.length-1;r++)
     for(let c=0;c<aX.length-1;c++){
       const x=Math.max(0,aX[c]),y=Math.max(0,aY[r]);
       const w=Math.min(origImg.width,aX[c+1])-x;
@@ -470,7 +445,6 @@ function splitImage(){
       tc.drawImage(origImg,x,y,w,h,0,0,w,h);
       tiles.push({url:tmp.toDataURL('image/png'),w,h});
     }
-  }
   savedSet=new Set();
   showGallery();
 }
@@ -513,21 +487,17 @@ function downloadOne(i){
   document.getElementById(`img-${i}`).classList.add('saved');
   updateSaveCount();
 }
-
 async function downloadAll(){
   for(let i=0;i<tiles.length;i++){
-    downloadOne(i);
-    await new Promise(r=>setTimeout(r,300));
+    downloadOne(i);await new Promise(r=>setTimeout(r,300));
   }
 }
-
 function updateSaveCount(){
   const total=tiles.length,saved=savedSet.size;
   document.getElementById('saveCount').textContent=
     saved===0?`${total}장 — 탭하면 저장!`:
     saved===total?'🎉 전체 저장 완료!':`${saved}/${total} 저장됨`;
 }
-
 function setStatus(msg){statusEl.textContent=msg;}
 
 let resizeTimer;
