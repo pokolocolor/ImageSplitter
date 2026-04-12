@@ -5,20 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#e8f0fe">
+<meta name="theme-color" content="#f5f0ea">
 <title>젬 있는 세상</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
 
 :root {
-  --bg:#eef3fb;
-  --card-bg:#ffffff;
+  --bg:#f5f0ea;
   --text:#333;
-  --text-dim:#888;
+  --text-dim:#999;
   --safe-bottom:env(safe-area-inset-bottom, 0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
 body{
   background:var(--bg);color:var(--text);
   font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,"맑은 고딕",sans-serif;
@@ -27,64 +26,51 @@ body{
 }
 
 /* ══ 화면 전환 ══ */
-.screen{flex:1;display:none;flex-direction:column;overflow:hidden;min-height:0}
+.screen{
+  position:absolute;inset:0;
+  display:none;flex-direction:column;overflow:hidden;
+  background:var(--bg);
+}
 .screen.active{display:flex}
 
 /* ══════════════════════════════
    홈 화면
    ══════════════════════════════ */
 #screen-home{
-  background:linear-gradient(180deg,#e8f4ff 0%,#f0f0ff 40%,#fff5f5 100%);
-  align-items:center;
+  align-items:center;justify-content:flex-start;
   overflow-y:auto;-webkit-overflow-scrolling:touch;
-  padding-bottom:calc(30px + var(--safe-bottom));
+}
+
+.home-scroll{
+  width:100%;
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 20px;
+  padding-bottom:calc(40px + var(--safe-bottom));
 }
 
 .home-header{
-  padding:36px 20px 10px;text-align:center;
+  padding:32px 0 0;text-align:center;
+  width:100%;
 }
-.gem-icon{
-  width:72px;height:72px;margin:0 auto 12px;
-  background:linear-gradient(135deg,#60c5f7 0%,#a78bfa 40%,#f9a825 100%);
-  border-radius:20px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:40px;
-  box-shadow:0 6px 24px rgba(96,197,247,.35);
-  animation:gemFloat 3s ease-in-out infinite;
-  position:relative;
+.logo-img{
+  width:180px;height:auto;
+  margin:0 auto 0;
+  display:block;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.06));
 }
-.gem-icon::after{
-  content:'';position:absolute;inset:-4px;border-radius:24px;
-  background:linear-gradient(135deg,rgba(96,197,247,.3),rgba(167,139,250,.2),rgba(249,168,37,.3));
-  z-index:-1;filter:blur(8px);
-}
-@keyframes gemFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-}
-
-.home-title{
-  font-size:28px;font-weight:900;
-  background:linear-gradient(135deg,#4a9eff,#a855f7,#f59e0b);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-  letter-spacing:-0.5px;
-  margin-bottom:4px;
-}
-.home-sub{font-size:13px;color:#999;font-weight:400;letter-spacing:0.5px}
 
 /* 메뉴 카드 */
 .menu-list{
-  width:100%;max-width:420px;
-  padding:20px 20px 0;
+  width:100%;max-width:400px;
+  padding:28px 0 0;
   display:flex;flex-direction:column;gap:14px;
 }
 
 .menu-card{
   position:relative;
-  border-radius:22px;
-  padding:20px 24px 20px 80px;
-  min-height:76px;
+  border-radius:50px;
+  padding:0 28px;
+  height:68px;
   display:flex;align-items:center;
   cursor:pointer;
   overflow:hidden;
@@ -93,99 +79,97 @@ body{
   border:none;
   font-family:inherit;
   width:100%;
+  gap:14px;
 }
 .menu-card:active{transform:scale(.97)}
 
 .menu-card .card-emoji{
-  position:absolute;left:16px;top:50%;transform:translateY(-50%);
-  width:52px;height:52px;
-  background:rgba(255,255,255,.5);
-  border-radius:16px;
+  width:46px;height:46px;
+  background:rgba(255,255,255,.45);
+  border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-size:30px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  font-size:26px;
+  flex-shrink:0;
+  box-shadow:0 2px 6px rgba(0,0,0,.06);
 }
 
+.menu-card .card-body{
+  flex:1;min-width:0;
+}
 .menu-card .card-text{
-  font-size:18px;font-weight:800;color:#fff;
-  text-shadow:0 1px 4px rgba(0,0,0,.15);
-  letter-spacing:-0.3px;
+  font-size:17px;font-weight:800;color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.12);
 }
 .menu-card .card-sub{
-  font-size:11px;font-weight:400;color:rgba(255,255,255,.85);
-  margin-top:2px;
+  font-size:11px;font-weight:400;color:rgba(255,255,255,.8);
+  margin-top:1px;
 }
 
-/* 카드 반짝이 효과 */
+.menu-card .card-arrow{
+  font-size:18px;color:rgba(255,255,255,.6);flex-shrink:0;
+}
+
+/* 카드 빛 효과 */
 .menu-card::before{
   content:'';position:absolute;
-  top:-50%;left:-50%;width:200%;height:200%;
-  background:radial-gradient(ellipse at 30% 30%,rgba(255,255,255,.25) 0%,transparent 60%);
+  top:-40%;left:-20%;width:60%;height:180%;
+  background:linear-gradient(120deg,rgba(255,255,255,.25) 0%,transparent 50%);
   pointer-events:none;
 }
-.menu-card::after{
-  content:'✦';position:absolute;
-  right:20px;top:12px;font-size:14px;color:rgba(255,255,255,.5);
-  animation:twinkle 2s ease-in-out infinite;
-}
-@keyframes twinkle{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.8;transform:scale(1.3)}}
 
-/* 카드 색상 */
+/* ── 카드 색상 ── */
 .card-purple{
-  background:linear-gradient(135deg,#c084fc,#a855f7,#7c3aed);
-  box-shadow:0 6px 20px rgba(168,85,247,.3);
+  background:linear-gradient(135deg,#c490f0,#9b6dd7,#7b4fbf);
+  box-shadow:0 4px 16px rgba(155,109,215,.35);
 }
 .card-pink{
-  background:linear-gradient(135deg,#f0abfc,#e879a8,#d946b8);
-  box-shadow:0 6px 20px rgba(217,70,184,.25);
-}
-.card-blue{
-  background:linear-gradient(135deg,#67d3f8,#38bdf8,#2563eb);
-  box-shadow:0 6px 20px rgba(56,189,248,.3);
+  background:linear-gradient(135deg,#f0a0d0,#e070b0,#c850a0);
+  box-shadow:0 4px 16px rgba(224,112,176,.3);
 }
 .card-amber{
-  background:linear-gradient(135deg,#fcd34d,#f59e0b,#ea8a00);
-  box-shadow:0 6px 20px rgba(245,158,11,.3);
+  background:linear-gradient(135deg,#ffd060,#f0a830,#e09020);
+  box-shadow:0 4px 16px rgba(240,168,48,.35);
+}
+.card-blue{
+  background:linear-gradient(135deg,#70c8f8,#40a0e0,#2878c8);
+  box-shadow:0 4px 16px rgba(64,160,224,.3);
 }
 .card-green{
-  background:linear-gradient(135deg,#6ee7b7,#34d399,#059669);
-  box-shadow:0 6px 20px rgba(52,211,153,.3);
+  background:linear-gradient(135deg,#80e0a0,#40c870,#28a858);
+  box-shadow:0 4px 16px rgba(64,200,112,.3);
 }
 
 .home-footer{
-  margin-top:28px;
-  font-size:11px;color:#bbb;text-align:center;
-  padding:0 20px;
+  margin-top:32px;
+  font-size:11px;color:#ccc;text-align:center;
+  width:100%;
 }
 
 /* ══════════════════════════════
-   이모티콘 자르기 (편집기) 화면
+   편집기 & 갤러리 공통
    ══════════════════════════════ */
-
-/* 편집기 상단 네비 */
 .nav-bar{
-  background:linear-gradient(135deg,#4a9eff,#7c3aed);
+  background:linear-gradient(135deg,#40a0e0,#7b4fbf);
   padding:10px 14px;
   display:flex;align-items:center;gap:10px;
   flex-shrink:0;
-  box-shadow:0 2px 12px rgba(74,158,255,.25);
+  box-shadow:0 2px 12px rgba(64,160,224,.2);
 }
 .nav-back{
   width:34px;height:34px;border:none;border-radius:12px;
   background:rgba(255,255,255,.2);color:#fff;
   font-size:18px;cursor:pointer;display:flex;
   align-items:center;justify-content:center;
-  touch-action:manipulation;transition:background .15s;
+  touch-action:manipulation;
 }
 .nav-back:active{background:rgba(255,255,255,.35)}
 .nav-title{font-size:16px;font-weight:800;color:#fff;flex:1}
 
-/* 편집기 툴바 */
 #editorBar{
   background:#fff;
   padding:6px 10px;
   display:flex;flex-direction:column;gap:5px;
-  box-shadow:0 2px 10px rgba(0,0,0,.06);
+  box-shadow:0 2px 10px rgba(0,0,0,.04);
   z-index:10;flex-shrink:0;
   border-bottom:1px solid #eee;
 }
@@ -198,41 +182,29 @@ body{
   touch-action:manipulation;
 }
 .ed-btn:active{opacity:.7;transform:scale(.94)}
-.ed-btn-blue{
-  background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#fff;
-  box-shadow:0 2px 6px rgba(59,130,246,.2);
-}
-.ed-btn-red{
-  background:linear-gradient(135deg,#fb7185,#ef4444);color:#fff;
-  box-shadow:0 2px 6px rgba(239,68,68,.2);
-}
-.ed-btn-green{
-  background:linear-gradient(135deg,#4ade80,#22c55e);color:#fff;
-  box-shadow:0 2px 6px rgba(34,197,94,.2);
-}
-.ed-btn-amber{
-  background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;
-  box-shadow:0 2px 6px rgba(245,158,11,.2);
-}
+.ed-btn-blue{background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#fff;box-shadow:0 2px 6px rgba(59,130,246,.2)}
+.ed-btn-red{background:linear-gradient(135deg,#fb7185,#ef4444);color:#fff;box-shadow:0 2px 6px rgba(239,68,68,.2)}
+.ed-btn-green{background:linear-gradient(135deg,#4ade80,#22c55e);color:#fff;box-shadow:0 2px 6px rgba(34,197,94,.2)}
+.ed-btn-amber{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;box-shadow:0 2px 6px rgba(245,158,11,.2)}
 
 .ed-preset{
-  background:#f3f0ff;color:#7c3aed;
+  background:#f8f4ff;color:#7b4fbf;
   font-size:12px;padding:6px 12px;
-  border:1.5px solid #e0d4ff;border-radius:20px;
+  border:1.5px solid #e8d8f8;border-radius:20px;
   font-weight:700;cursor:pointer;transition:all .12s;touch-action:manipulation;
 }
 .ed-preset:active{opacity:.7;transform:scale(.94)}
 .ed-preset.active{
-  background:linear-gradient(135deg,#a855f7,#7c3aed);
-  color:#fff;border-color:#a855f7;
-  box-shadow:0 0 10px rgba(124,58,237,.25);
+  background:linear-gradient(135deg,#9b6dd7,#7b4fbf);
+  color:#fff;border-color:#9b6dd7;
+  box-shadow:0 0 10px rgba(123,79,191,.25);
 }
 
 .ed-sm{
   width:24px;height:24px;padding:0;border:none;border-radius:7px;
-  background:#f0f0f8;color:#666;font-size:11px;line-height:1;
+  background:#f4f2f8;color:#666;font-size:11px;line-height:1;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
-  touch-action:manipulation;flex-shrink:0;border:1px solid #e0e0e8;
+  touch-action:manipulation;flex-shrink:0;border:1px solid #e8e4ee;
 }
 .ed-sm:active{background:#ddd}
 
@@ -240,8 +212,8 @@ body{
 
 .ed-num{
   display:flex;align-items:center;gap:2px;
-  background:#f8f8fc;border-radius:8px;
-  padding:2px 3px;border:1px solid #e0e0e8;
+  background:#faf8fc;border-radius:8px;
+  padding:2px 3px;border:1px solid #e8e4ee;
 }
 .ed-num input[type=number]{
   width:24px;padding:1px 0;border:none;border-radius:4px;
@@ -252,37 +224,36 @@ body{
 .ed-num input::-webkit-outer-spin-button,
 .ed-num input::-webkit-inner-spin-button{-webkit-appearance:none}
 
-.ed-sep{width:1px;height:22px;background:#e0e0e8;flex-shrink:0}
+.ed-sep{width:1px;height:22px;background:#e8e4ee;flex-shrink:0}
 
-/* 캔버스 영역 */
 #canvasWrap{
   flex:1;display:flex;align-items:center;justify-content:center;
   overflow:hidden;position:relative;touch-action:none;min-height:0;
-  background:#f8f9fc;
+  background:#f8f6f2;
 }
 #mainCanvas{display:block;cursor:crosshair;touch-action:none}
 #overlay{
   position:absolute;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:16px;
-  color:#bbb;pointer-events:none;text-align:center;padding:20px;
+  color:#ccc;pointer-events:none;text-align:center;padding:20px;
 }
 #overlay .icon{font-size:56px}
-#overlay .txt{font-size:14px;line-height:1.8;color:#aaa}
-#overlay .txt strong{color:#7c3aed}
+#overlay .txt{font-size:14px;line-height:1.8;color:#bbb}
+#overlay .txt strong{color:#9b6dd7}
 
 #statusBar{
   background:#fff;padding:6px 12px;
   padding-bottom:calc(6px + var(--safe-bottom));
-  font-size:11px;color:#aaa;
+  font-size:11px;color:#bbb;
   border-top:1px solid #eee;flex-shrink:0;
 }
 
-/* ══ 갤러리 화면 ══ */
+/* ══ 갤러리 ══ */
 #galleryHeader{
-  background:linear-gradient(135deg,#4a9eff,#7c3aed);
+  background:linear-gradient(135deg,#40a0e0,#7b4fbf);
   padding:10px 14px;
   display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;box-shadow:0 2px 12px rgba(74,158,255,.25);
+  flex-shrink:0;box-shadow:0 2px 12px rgba(64,160,224,.2);
 }
 #galleryHeader h2{font-size:15px;font-weight:800;color:#fff}
 #saveCount{
@@ -291,7 +262,7 @@ body{
 }
 
 #galleryScroll{
-  flex:1;overflow-y:auto;background:#f8f9fc;
+  flex:1;overflow-y:auto;background:#f8f6f2;
   -webkit-overflow-scrolling:touch;padding:8px;min-height:0;
 }
 #galleryGrid{display:grid;gap:4px;width:100%}
@@ -299,20 +270,20 @@ body{
 .img-item{
   position:relative;width:100%;background:#fff;
   border-radius:8px;cursor:pointer;overflow:hidden;
-  border:2px solid #f0f0f8;transition:border-color .2s;
-  box-shadow:0 2px 8px rgba(0,0,0,.04);
+  border:2px solid #f0ece6;transition:border-color .2s;
+  box-shadow:0 2px 6px rgba(0,0,0,.04);
 }
-.img-item:active{border-color:#a855f7}
+.img-item:active{border-color:#9b6dd7}
 .img-item img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
 .img-num{
   position:absolute;top:3px;left:3px;
-  background:rgba(124,58,237,.85);color:#fff;
+  background:rgba(123,79,191,.85);color:#fff;
   font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;
   pointer-events:none;z-index:2;
 }
 .img-hint{
   position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(transparent,rgba(0,0,0,.5));
+  background:linear-gradient(transparent,rgba(0,0,0,.45));
   color:#fff;font-size:9px;font-weight:700;text-align:center;
   padding:12px 0 4px;pointer-events:none;z-index:2;transition:opacity .3s;
 }
@@ -339,46 +310,45 @@ body{
 /* 진행 오버레이 */
 #dlProgress{
   display:none;position:fixed;inset:0;z-index:100;
-  background:rgba(255,255,255,.85);backdrop-filter:blur(8px);
+  background:rgba(245,240,234,.9);backdrop-filter:blur(8px);
   align-items:center;justify-content:center;flex-direction:column;gap:16px;
 }
 #dlProgress .prog-box{
   background:#fff;border-radius:20px;padding:28px 36px;
-  text-align:center;border:2px solid #f0f0f8;
-  box-shadow:0 8px 32px rgba(0,0,0,.08);
+  text-align:center;border:2px solid #f0ece6;
+  box-shadow:0 8px 32px rgba(0,0,0,.06);
 }
 #dlProgress .prog-title{font-size:15px;font-weight:700;margin-bottom:12px;color:#333}
 #dlProgress .prog-bar-wrap{
-  width:200px;height:8px;background:#f0f0f8;border-radius:4px;overflow:hidden;margin:0 auto 10px;
+  width:200px;height:8px;background:#f0ece6;border-radius:4px;overflow:hidden;margin:0 auto 10px;
 }
 #dlProgress .prog-bar{
   height:100%;width:0%;
-  background:linear-gradient(90deg,#a855f7,#f472b6);
+  background:linear-gradient(90deg,#9b6dd7,#f0a0d0);
   border-radius:4px;transition:width .3s;
 }
 #dlProgress .prog-text{font-size:13px;color:#999}
 
 /* ══ 반응형 ══ */
 @media(max-width:360px){
-  .home-title{font-size:24px}
-  .gem-icon{width:60px;height:60px;font-size:34px;border-radius:16px}
-  .menu-card{padding:16px 20px 16px 70px;min-height:66px;border-radius:18px}
-  .menu-card .card-emoji{width:44px;height:44px;font-size:26px;left:14px;border-radius:14px}
-  .menu-card .card-text{font-size:16px}
+  .logo-img{width:150px}
+  .menu-card{height:60px;padding:0 22px;gap:12px;border-radius:40px}
+  .menu-card .card-emoji{width:40px;height:40px;font-size:22px}
+  .menu-card .card-text{font-size:15px}
+  .menu-card .card-sub{font-size:10px}
+  .menu-list{gap:11px}
   .ed-btn{padding:6px 10px;font-size:12px}
   .ed-preset{padding:5px 9px;font-size:11px}
   .ed-sm{width:22px;height:22px;font-size:10px}
   .ed-num input[type=number]{width:22px;font-size:13px}
 }
 @media(min-width:601px){
-  .home-header{padding:48px 20px 16px}
-  .gem-icon{width:88px;height:88px;font-size:50px;border-radius:24px}
-  .home-title{font-size:34px}
-  .home-sub{font-size:15px}
-  .menu-list{max-width:500px;gap:16px;padding:28px 20px 0}
-  .menu-card{padding:24px 28px 24px 90px;min-height:86px;border-radius:24px}
-  .menu-card .card-emoji{width:58px;height:58px;font-size:34px;left:18px}
-  .menu-card .card-text{font-size:20px}
+  .logo-img{width:220px}
+  .home-header{padding:48px 0 0}
+  .menu-list{max-width:480px;gap:16px;padding:36px 0 0}
+  .menu-card{height:78px;padding:0 32px;gap:16px;border-radius:50px}
+  .menu-card .card-emoji{width:52px;height:52px;font-size:30px}
+  .menu-card .card-text{font-size:19px}
   .menu-card .card-sub{font-size:12px}
   .ed-btn{padding:10px 18px;font-size:15px}
   .ed-preset{padding:8px 16px;font-size:14px}
@@ -388,43 +358,28 @@ body{
   .img-num{font-size:12px;padding:2px 7px;top:5px;left:5px}
 }
 @media(min-width:1024px){
-  .menu-list{max-width:560px}
+  .menu-list{max-width:520px}
   #galleryScroll{padding:20px;max-width:1100px;margin:0 auto;width:100%}
   #galleryGrid{gap:8px}
 }
 @media(max-height:400px) and (orientation:landscape){
-  .home-header{padding:16px 20px 4px}
-  .gem-icon{width:44px;height:44px;font-size:26px}
-  .home-title{font-size:20px}
-  .menu-list{gap:8px;padding:10px 20px 0}
-  .menu-card{padding:12px 16px 12px 60px;min-height:50px;border-radius:14px}
-  .menu-card .card-emoji{width:36px;height:36px;font-size:22px;left:10px;border-radius:10px}
-  .menu-card .card-text{font-size:14px}
+  .logo-img{width:100px}
+  .home-header{padding:10px 0 0}
+  .menu-list{gap:8px;padding:12px 0 0}
+  .menu-card{height:48px;padding:0 18px;gap:10px;border-radius:30px}
+  .menu-card .card-emoji{width:32px;height:32px;font-size:18px}
+  .menu-card .card-text{font-size:13px}
+  .menu-card .card-sub{display:none}
   .nav-bar{padding:6px 10px}
   #editorBar{padding:4px 8px;gap:3px}
   .ed-btn{padding:5px 8px;font-size:11px}
   .ed-preset{padding:4px 8px;font-size:10px}
   #statusBar{padding:4px 8px;font-size:10px}
 }
-
-/* 배경 데코 */
-#screen-home::before{
-  content:'';position:absolute;top:-80px;right:-80px;
-  width:250px;height:250px;
-  background:radial-gradient(circle,rgba(168,85,247,.08) 0%,transparent 70%);
-  border-radius:50%;pointer-events:none;
-}
-#screen-home::after{
-  content:'';position:absolute;bottom:-60px;left:-60px;
-  width:200px;height:200px;
-  background:radial-gradient(circle,rgba(56,189,248,.08) 0%,transparent 70%);
-  border-radius:50%;pointer-events:none;
-}
 </style>
 </head>
 <body>
 
-<!-- 진행 오버레이 -->
 <div id="dlProgress">
   <div class="prog-box">
     <div class="prog-title">⬇️ 저장 중...</div>
@@ -433,50 +388,47 @@ body{
   </div>
 </div>
 
-<!-- ══════════════════════════════
-     홈 화면
-     ══════════════════════════════ -->
+<!-- ══ 홈 화면 ══ -->
 <div id="screen-home" class="screen active">
-  <div class="home-header">
-    <div class="gem-icon">💎</div>
-    <div class="home-title">젬 있는 세상</div>
-    <div class="home-sub">모두의 젬 공유 플랫폼</div>
-  </div>
+  <div class="home-scroll">
+    <div class="home-header">
+      <img class="logo-img" src="https://www.genspark.ai/api/files/s/Kpb4yERZ" alt="젬 있는 세상">
+    </div>
 
-  <div class="menu-list">
-    <button class="menu-card card-purple" onclick="openGem('character')">
-      <div class="card-emoji">🎨</div>
-      <div>
-        <div class="card-text">캐릭터 메이커</div>
-        <div class="card-sub">나만의 캐릭터를 만들어보세요</div>
-      </div>
-    </button>
+    <div class="menu-list">
+      <button class="menu-card card-purple" onclick="openGem('character')">
+        <div class="card-emoji">🎨</div>
+        <div class="card-body">
+          <div class="card-text">캐릭터 메이커</div>
+          <div class="card-sub">나만의 캐릭터를 만들어보세요</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </button>
 
-    <button class="menu-card card-pink" onclick="openGem('emoticon')">
-      <div class="card-emoji">😆</div>
-      <div>
-        <div class="card-text">이모티콘 메이커</div>
-        <div class="card-sub">귀여운 이모티콘을 생성해요</div>
-      </div>
-    </button>
+      <button class="menu-card card-pink" onclick="openGem('emoticon')">
+        <div class="card-emoji">😆</div>
+        <div class="card-body">
+          <div class="card-text">이모티콘 메이커</div>
+          <div class="card-sub">귀여운 이모티콘을 생성해요</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </button>
 
-    <button class="menu-card card-amber" onclick="goScreen('screen-editor')">
-      <div class="card-emoji">✂️</div>
-      <div>
-        <div class="card-text">이모티콘 자르기</div>
-        <div class="card-sub">이미지를 분할해서 저장해요</div>
-      </div>
-    </button>
-  </div>
+      <button class="menu-card card-amber" onclick="goScreen('screen-editor')">
+        <div class="card-emoji">✂️</div>
+        <div class="card-body">
+          <div class="card-text">이모티콘 자르기</div>
+          <div class="card-sub">이미지를 분할해서 저장해요</div>
+        </div>
+        <div class="card-arrow">›</div>
+      </button>
+    </div>
 
-  <div class="home-footer">
-    ✦ 새로운 젬이 계속 추가됩니다 ✦
+    <div class="home-footer">✦ 새로운 젬이 계속 추가됩니다 ✦</div>
   </div>
 </div>
 
-<!-- ══════════════════════════════
-     이모티콘 자르기 — 편집 화면
-     ══════════════════════════════ -->
+<!-- ══ 편집기 화면 ══ -->
 <div id="screen-editor" class="screen">
   <div class="nav-bar">
     <button class="nav-back" onclick="goScreen('screen-home')">←</button>
@@ -522,9 +474,7 @@ body{
   <div id="statusBar">준비 완료 — 이미지를 열어주세요!</div>
 </div>
 
-<!-- ══════════════════════════════
-     이모티콘 자르기 — 갤러리 화면
-     ══════════════════════════════ -->
+<!-- ══ 갤러리 화면 ══ -->
 <div id="screen-gallery" class="screen">
   <div id="galleryHeader">
     <h2>🖼️ 분할 결과</h2>
@@ -545,16 +495,20 @@ body{
 function goScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  // 캔버스 리사이즈
+  if(id==='screen-editor'&&origImg){
+    requestAnimationFrame(()=>{fitCanvas();resetLines()});
+  }
 }
 
-/* ══ 외부 Gem 열기 ══ */
+/* ══ 외부 Gem ══ */
 const GEM_URLS={
   character:'https://gemini.google.com/gem/1AJdDfAyaB1x60PV0gjAdSaeBoityoLbB?usp=sharing',
   emoticon:'https://gemini.google.com/gem/1iYKFc8k1AyT5v4kTHuqPHYd1zpIp6zo9?usp=sharing',
 };
 function openGem(key){window.open(GEM_URLS[key],'_blank')}
 
-/* ══ 편집기 로직 ══ */
+/* ══ 편집기 ══ */
 const canvas=document.getElementById('mainCanvas');
 const ctx=canvas.getContext('2d');
 const wrap=document.getElementById('canvasWrap');
@@ -608,6 +562,7 @@ wrap.addEventListener('drop',e=>{e.preventDefault();readFile(e.dataTransfer.file
 
 function fitCanvas(){
   const pad=8,maxW=wrap.clientWidth-pad*2,maxH=wrap.clientHeight-pad*2;
+  if(!origImg||maxW<=0||maxH<=0)return;
   scale=Math.min(maxW/origImg.width,maxH/origImg.height,1);
   dispW=Math.floor(origImg.width*scale);dispH=Math.floor(origImg.height*scale);
   canvas.width=wrap.clientWidth;canvas.height=wrap.clientHeight;
@@ -628,9 +583,9 @@ function redraw(){
   ctx.strokeStyle='#ccc';ctx.lineWidth=1;
   ctx.strokeRect(offsetX,offsetY,dispW,dispH);
   ctx.lineWidth=2;ctx.setLineDash([8,4]);
-  ctx.strokeStyle='#38bdf8';
+  ctx.strokeStyle='#40a0e0';
   hLines.forEach(y=>{ctx.beginPath();ctx.moveTo(offsetX,y);ctx.lineTo(offsetX+dispW,y);ctx.stroke()});
-  ctx.strokeStyle='#f59e0b';
+  ctx.strokeStyle='#f0a830';
   vLines.forEach(x=>{ctx.beginPath();ctx.moveTo(x,offsetY);ctx.lineTo(x,offsetY+dispH);ctx.stroke()});
   ctx.setLineDash([]);
   const aY=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
@@ -641,7 +596,7 @@ function redraw(){
   for(let r=0;r<aY.length-1;r++)
     for(let c=0;c<aX.length-1;c++){
       const mx=(aX[c]+aX[c+1])/2,my=(aY[r]+aY[r+1])/2;
-      ctx.fillStyle='rgba(124,58,237,.7)';
+      ctx.fillStyle='rgba(123,79,191,.7)';
       ctx.beginPath();ctx.arc(mx,my,fs*1.15,0,Math.PI*2);ctx.fill();
       ctx.fillStyle='#fff';ctx.fillText(n++,mx,my);
     }
@@ -811,7 +766,12 @@ function setStatus(msg){statusEl.textContent=msg}
 let resizeTimer;
 window.addEventListener('resize',()=>{
   clearTimeout(resizeTimer);
-  resizeTimer=setTimeout(()=>{if(!origImg)return;fitCanvas();resetLines()},150);
+  resizeTimer=setTimeout(()=>{
+    if(!origImg)return;
+    if(document.getElementById('screen-editor').classList.contains('active')){
+      fitCanvas();resetLines();
+    }
+  },150);
 });
 document.getElementById('cols').addEventListener('input',()=>{syncPreset();resetLines()});
 document.getElementById('rows').addEventListener('input',()=>{syncPreset();resetLines()});
