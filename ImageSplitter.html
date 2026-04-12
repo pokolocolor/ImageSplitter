@@ -5,197 +5,320 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#1a1a2e">
-<title>나만의 이모티콘 만들기</title>
+<meta name="theme-color" content="#e8f0fe">
+<title>젬 있는 세상</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+
 :root {
-  --primary:#7c3aed;
-  --primary-light:#a78bfa;
-  --primary-dark:#5b21b6;
-  --accent:#f472b6;
-  --accent2:#38bdf8;
-  --bar-bg:rgba(26,26,46,.95);
-  --bg-deep:#0f0f23;
-  --bg-dark:#1a1a2e;
-  --bg-card:#16213e;
-  --text:#e2e8f0;
-  --text-dim:#94a3b8;
-  --text-sub:#cbd5e1;
-  --border:rgba(124,58,237,.25);
+  --bg:#eef3fb;
+  --card-bg:#ffffff;
+  --text:#333;
+  --text-dim:#888;
   --safe-bottom:env(safe-area-inset-bottom, 0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{
-  background:var(--bg-deep);color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"맑은 고딕","Apple SD Gothic Neo","Segoe UI",sans-serif;
+  background:var(--bg);color:var(--text);
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,"맑은 고딕",sans-serif;
   display:flex;flex-direction:column;height:100dvh;
   user-select:none;-webkit-user-select:none;
 }
 
-#appHeader{
-  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
-  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;border-bottom:1px solid var(--border);
-  box-shadow:0 2px 20px rgba(124,58,237,.1);z-index:20;
+/* ══ 화면 전환 ══ */
+.screen{flex:1;display:none;flex-direction:column;overflow:hidden;min-height:0}
+.screen.active{display:flex}
+
+/* ══════════════════════════════
+   홈 화면
+   ══════════════════════════════ */
+#screen-home{
+  background:linear-gradient(180deg,#e8f4ff 0%,#f0f0ff 40%,#fff5f5 100%);
+  align-items:center;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding-bottom:calc(30px + var(--safe-bottom));
 }
-.app-logo{display:flex;align-items:center;gap:8px}
-.app-logo .logo-icon{
-  width:32px;height:32px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  border-radius:10px;display:flex;align-items:center;justify-content:center;
-  font-size:18px;box-shadow:0 2px 12px rgba(124,58,237,.3);
+
+.home-header{
+  padding:36px 20px 10px;text-align:center;
 }
-.app-logo .logo-text{
-  font-size:15px;font-weight:800;
-  background:linear-gradient(135deg,var(--primary-light),var(--accent));
+.gem-icon{
+  width:72px;height:72px;margin:0 auto 12px;
+  background:linear-gradient(135deg,#60c5f7 0%,#a78bfa 40%,#f9a825 100%);
+  border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px;
+  box-shadow:0 6px 24px rgba(96,197,247,.35);
+  animation:gemFloat 3s ease-in-out infinite;
+  position:relative;
+}
+.gem-icon::after{
+  content:'';position:absolute;inset:-4px;border-radius:24px;
+  background:linear-gradient(135deg,rgba(96,197,247,.3),rgba(167,139,250,.2),rgba(249,168,37,.3));
+  z-index:-1;filter:blur(8px);
+}
+@keyframes gemFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+.home-title{
+  font-size:28px;font-weight:900;
+  background:linear-gradient(135deg,#4a9eff,#a855f7,#f59e0b);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;letter-spacing:-0.3px;
+  background-clip:text;
+  letter-spacing:-0.5px;
+  margin-bottom:4px;
+}
+.home-sub{font-size:13px;color:#999;font-weight:400;letter-spacing:0.5px}
+
+/* 메뉴 카드 */
+.menu-list{
+  width:100%;max-width:420px;
+  padding:20px 20px 0;
+  display:flex;flex-direction:column;gap:14px;
 }
 
-.header-btns{display:flex;gap:6px;align-items:center}
+.menu-card{
+  position:relative;
+  border-radius:22px;
+  padding:20px 24px 20px 80px;
+  min-height:76px;
+  display:flex;align-items:center;
+  cursor:pointer;
+  overflow:hidden;
+  transition:transform .15s,box-shadow .2s;
+  text-decoration:none;
+  border:none;
+  font-family:inherit;
+  width:100%;
+}
+.menu-card:active{transform:scale(.97)}
 
-.btn-gem{
-  padding:7px 12px;border:none;border-radius:20px;
-  color:#fff;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;
-  transition:all .2s;touch-action:manipulation;
-  display:flex;align-items:center;gap:4px;text-decoration:none;
-}
-.btn-gem:active{transform:scale(.94);opacity:.8}
-.btn-gem-pink{
-  background:linear-gradient(135deg,var(--accent),#e879a8);
-  box-shadow:0 2px 10px rgba(244,114,182,.3);
-}
-.btn-gem-cyan{
-  background:linear-gradient(135deg,var(--accent2),#0ea5e9);
-  box-shadow:0 2px 10px rgba(56,189,248,.3);
+.menu-card .card-emoji{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:52px;height:52px;
+  background:rgba(255,255,255,.5);
+  border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-#topBar{
-  background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:6px 8px;display:flex;flex-direction:column;gap:5px;
-  box-shadow:0 2px 16px rgba(0,0,0,.3);z-index:10;flex-shrink:0;
-  border-bottom:1px solid var(--border);
+.menu-card .card-text{
+  font-size:18px;font-weight:800;color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.15);
+  letter-spacing:-0.3px;
 }
-.top-row{display:flex;align-items:center;gap:6px;justify-content:center;flex-wrap:nowrap}
-.preset-row{display:flex;align-items:center;gap:5px;justify-content:center}
+.menu-card .card-sub{
+  font-size:11px;font-weight:400;color:rgba(255,255,255,.85);
+  margin-top:2px;
+}
 
-.btn{
-  padding:7px 12px;border:none;border-radius:10px;
+/* 카드 반짝이 효과 */
+.menu-card::before{
+  content:'';position:absolute;
+  top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(ellipse at 30% 30%,rgba(255,255,255,.25) 0%,transparent 60%);
+  pointer-events:none;
+}
+.menu-card::after{
+  content:'✦';position:absolute;
+  right:20px;top:12px;font-size:14px;color:rgba(255,255,255,.5);
+  animation:twinkle 2s ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.8;transform:scale(1.3)}}
+
+/* 카드 색상 */
+.card-purple{
+  background:linear-gradient(135deg,#c084fc,#a855f7,#7c3aed);
+  box-shadow:0 6px 20px rgba(168,85,247,.3);
+}
+.card-pink{
+  background:linear-gradient(135deg,#f0abfc,#e879a8,#d946b8);
+  box-shadow:0 6px 20px rgba(217,70,184,.25);
+}
+.card-blue{
+  background:linear-gradient(135deg,#67d3f8,#38bdf8,#2563eb);
+  box-shadow:0 6px 20px rgba(56,189,248,.3);
+}
+.card-amber{
+  background:linear-gradient(135deg,#fcd34d,#f59e0b,#ea8a00);
+  box-shadow:0 6px 20px rgba(245,158,11,.3);
+}
+.card-green{
+  background:linear-gradient(135deg,#6ee7b7,#34d399,#059669);
+  box-shadow:0 6px 20px rgba(52,211,153,.3);
+}
+
+.home-footer{
+  margin-top:28px;
+  font-size:11px;color:#bbb;text-align:center;
+  padding:0 20px;
+}
+
+/* ══════════════════════════════
+   이모티콘 자르기 (편집기) 화면
+   ══════════════════════════════ */
+
+/* 편집기 상단 네비 */
+.nav-bar{
+  background:linear-gradient(135deg,#4a9eff,#7c3aed);
+  padding:10px 14px;
+  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;
+  box-shadow:0 2px 12px rgba(74,158,255,.25);
+}
+.nav-back{
+  width:34px;height:34px;border:none;border-radius:12px;
+  background:rgba(255,255,255,.2);color:#fff;
+  font-size:18px;cursor:pointer;display:flex;
+  align-items:center;justify-content:center;
+  touch-action:manipulation;transition:background .15s;
+}
+.nav-back:active{background:rgba(255,255,255,.35)}
+.nav-title{font-size:16px;font-weight:800;color:#fff;flex:1}
+
+/* 편집기 툴바 */
+#editorBar{
+  background:#fff;
+  padding:6px 10px;
+  display:flex;flex-direction:column;gap:5px;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+  z-index:10;flex-shrink:0;
+  border-bottom:1px solid #eee;
+}
+.ed-row{display:flex;align-items:center;gap:6px;justify-content:center;flex-wrap:nowrap}
+
+.ed-btn{
+  padding:7px 13px;border:none;border-radius:12px;
   font-family:inherit;font-size:13px;font-weight:700;
-  cursor:pointer;white-space:nowrap;transition:all .15s;touch-action:manipulation;
+  cursor:pointer;white-space:nowrap;transition:all .12s;
+  touch-action:manipulation;
 }
-.btn:active{opacity:.7;transform:scale(.94)}
-.btn-blue{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;box-shadow:0 2px 8px rgba(59,130,246,.25)}
-.btn-red{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 2px 8px rgba(239,68,68,.25)}
-.btn-green{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 2px 8px rgba(34,197,94,.25)}
-.btn-amber{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;box-shadow:0 2px 8px rgba(245,158,11,.25)}
+.ed-btn:active{opacity:.7;transform:scale(.94)}
+.ed-btn-blue{
+  background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#fff;
+  box-shadow:0 2px 6px rgba(59,130,246,.2);
+}
+.ed-btn-red{
+  background:linear-gradient(135deg,#fb7185,#ef4444);color:#fff;
+  box-shadow:0 2px 6px rgba(239,68,68,.2);
+}
+.ed-btn-green{
+  background:linear-gradient(135deg,#4ade80,#22c55e);color:#fff;
+  box-shadow:0 2px 6px rgba(34,197,94,.2);
+}
+.ed-btn-amber{
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;
+  box-shadow:0 2px 6px rgba(245,158,11,.2);
+}
 
-.btn-preset{
-  background:var(--bg-card);color:var(--primary-light);
+.ed-preset{
+  background:#f3f0ff;color:#7c3aed;
   font-size:12px;padding:6px 12px;
-  border:1.5px solid var(--border);border-radius:20px;
-  font-weight:700;cursor:pointer;transition:all .15s;touch-action:manipulation;
+  border:1.5px solid #e0d4ff;border-radius:20px;
+  font-weight:700;cursor:pointer;transition:all .12s;touch-action:manipulation;
 }
-.btn-preset:active{opacity:.7;transform:scale(.94)}
-.btn-preset.active{
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  color:#fff;border-color:var(--primary-light);
-  box-shadow:0 0 12px rgba(124,58,237,.35);
+.ed-preset:active{opacity:.7;transform:scale(.94)}
+.ed-preset.active{
+  background:linear-gradient(135deg,#a855f7,#7c3aed);
+  color:#fff;border-color:#a855f7;
+  box-shadow:0 0 10px rgba(124,58,237,.25);
 }
 
-.btn-sm{
-  width:22px;height:22px;padding:0;border:none;border-radius:6px;
-  background:var(--bg-card);color:var(--text-sub);
-  font-size:10px;line-height:1;cursor:pointer;display:flex;
-  align-items:center;justify-content:center;touch-action:manipulation;
-  flex-shrink:0;border:1px solid var(--border);
+.ed-sm{
+  width:24px;height:24px;padding:0;border:none;border-radius:7px;
+  background:#f0f0f8;color:#666;font-size:11px;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  touch-action:manipulation;flex-shrink:0;border:1px solid #e0e0e8;
 }
-.btn-sm:active{background:var(--primary-dark);color:#fff}
+.ed-sm:active{background:#ddd}
 
-.lbl{font-size:12px;color:var(--text-dim);white-space:nowrap}
+.ed-lbl{font-size:12px;color:#999;white-space:nowrap}
 
-.num-control{
+.ed-num{
   display:flex;align-items:center;gap:2px;
-  background:var(--bg-card);border-radius:8px;
-  padding:2px 3px;border:1px solid var(--border);
+  background:#f8f8fc;border-radius:8px;
+  padding:2px 3px;border:1px solid #e0e0e8;
 }
-.num-control input[type=number]{
+.ed-num input[type=number]{
   width:24px;padding:1px 0;border:none;border-radius:4px;
-  background:transparent;color:var(--text);
+  background:transparent;color:#333;
   font-size:14px;font-weight:700;text-align:center;
   font-family:inherit;-moz-appearance:textfield;
 }
-.num-control input::-webkit-outer-spin-button,
-.num-control input::-webkit-inner-spin-button{-webkit-appearance:none}
+.ed-num input::-webkit-outer-spin-button,
+.ed-num input::-webkit-inner-spin-button{-webkit-appearance:none}
 
-.sep{width:1px;height:22px;background:var(--border);flex-shrink:0}
+.ed-sep{width:1px;height:22px;background:#e0e0e8;flex-shrink:0}
 
-#screen-canvas{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+/* 캔버스 영역 */
 #canvasWrap{
   flex:1;display:flex;align-items:center;justify-content:center;
   overflow:hidden;position:relative;touch-action:none;min-height:0;
-  background:radial-gradient(ellipse at center,#1a1a2e 0%,#0f0f23 100%);
+  background:#f8f9fc;
 }
 #mainCanvas{display:block;cursor:crosshair;touch-action:none}
 #overlay{
   position:absolute;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:16px;
-  color:#4a4a6a;pointer-events:none;text-align:center;padding:20px;
+  color:#bbb;pointer-events:none;text-align:center;padding:20px;
 }
-#overlay .icon{font-size:56px;filter:drop-shadow(0 4px 12px rgba(124,58,237,.2))}
-#overlay .txt{font-size:14px;line-height:1.8;color:#5a5a7a}
-#overlay .txt strong{color:var(--primary-light)}
+#overlay .icon{font-size:56px}
+#overlay .txt{font-size:14px;line-height:1.8;color:#aaa}
+#overlay .txt strong{color:#7c3aed}
 
 #statusBar{
-  background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:6px 12px;padding-bottom:calc(6px + var(--safe-bottom));
-  font-size:11px;color:var(--text-dim);
-  border-top:1px solid var(--border);flex-shrink:0;
+  background:#fff;padding:6px 12px;
+  padding-bottom:calc(6px + var(--safe-bottom));
+  font-size:11px;color:#aaa;
+  border-top:1px solid #eee;flex-shrink:0;
 }
 
-#screen-gallery{flex:1;display:none;flex-direction:column;overflow:hidden;min-height:0}
+/* ══ 갤러리 화면 ══ */
 #galleryHeader{
-  background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;box-shadow:0 2px 16px rgba(0,0,0,.3);
-  border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,#4a9eff,#7c3aed);
+  padding:10px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;box-shadow:0 2px 12px rgba(74,158,255,.25);
 }
-#galleryHeader h2{font-size:14px;font-weight:700}
+#galleryHeader h2{font-size:15px;font-weight:800;color:#fff}
 #saveCount{
-  font-size:11px;color:var(--accent2);
-  background:rgba(56,189,248,.1);padding:3px 10px;border-radius:20px;
+  font-size:11px;color:#fff;
+  background:rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;
 }
 
 #galleryScroll{
-  flex:1;overflow-y:auto;
-  background:radial-gradient(ellipse at center,#1a1a2e 0%,#0f0f23 100%);
+  flex:1;overflow-y:auto;background:#f8f9fc;
   -webkit-overflow-scrolling:touch;padding:8px;min-height:0;
 }
 #galleryGrid{display:grid;gap:4px;width:100%}
 
 .img-item{
-  position:relative;width:100%;background:#000;
-  border-radius:6px;cursor:pointer;overflow:hidden;
-  border:1px solid rgba(124,58,237,.1);transition:border-color .2s;
+  position:relative;width:100%;background:#fff;
+  border-radius:8px;cursor:pointer;overflow:hidden;
+  border:2px solid #f0f0f8;transition:border-color .2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
 }
-.img-item:active{border-color:var(--primary-light)}
+.img-item:active{border-color:#a855f7}
 .img-item img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
 .img-num{
   position:absolute;top:3px;left:3px;
-  background:rgba(0,0,0,.75);color:#fff;
-  font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px;
-  pointer-events:none;z-index:2;backdrop-filter:blur(4px);
+  background:rgba(124,58,237,.85);color:#fff;
+  font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;
+  pointer-events:none;z-index:2;
 }
 .img-hint{
   position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(transparent,rgba(0,0,0,.85));
+  background:linear-gradient(transparent,rgba(0,0,0,.5));
   color:#fff;font-size:9px;font-weight:700;text-align:center;
   padding:12px 0 4px;pointer-events:none;z-index:2;transition:opacity .3s;
 }
 .img-saved{
   display:none;position:absolute;inset:0;
-  background:rgba(34,197,94,.2);align-items:center;justify-content:center;
+  background:rgba(34,197,94,.15);align-items:center;justify-content:center;
   pointer-events:none;z-index:3;
 }
 .img-saved span{
@@ -207,112 +330,101 @@ body{
 .img-item.saved img{opacity:.65}
 
 #galleryBottom{
-  background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:8px 10px;padding-bottom:calc(8px + var(--safe-bottom));
-  display:flex;gap:6px;flex-shrink:0;border-top:1px solid var(--border);
+  background:#fff;padding:8px 10px;
+  padding-bottom:calc(8px + var(--safe-bottom));
+  display:flex;gap:6px;flex-shrink:0;border-top:1px solid #eee;
 }
-#galleryBottom .btn{flex:1;text-align:center;font-size:12px;padding:9px 6px}
+#galleryBottom .ed-btn{flex:1;text-align:center;font-size:12px;padding:10px 6px}
 
+/* 진행 오버레이 */
 #dlProgress{
   display:none;position:fixed;inset:0;z-index:100;
-  background:rgba(0,0,0,.7);backdrop-filter:blur(6px);
+  background:rgba(255,255,255,.85);backdrop-filter:blur(8px);
   align-items:center;justify-content:center;flex-direction:column;gap:16px;
 }
 #dlProgress .prog-box{
-  background:var(--bg-card);border-radius:16px;padding:28px 36px;
-  text-align:center;border:1px solid var(--border);
-  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  background:#fff;border-radius:20px;padding:28px 36px;
+  text-align:center;border:2px solid #f0f0f8;
+  box-shadow:0 8px 32px rgba(0,0,0,.08);
 }
-#dlProgress .prog-title{font-size:15px;font-weight:700;margin-bottom:12px}
+#dlProgress .prog-title{font-size:15px;font-weight:700;margin-bottom:12px;color:#333}
 #dlProgress .prog-bar-wrap{
-  width:200px;height:8px;background:var(--bg-deep);border-radius:4px;overflow:hidden;margin:0 auto 10px;
+  width:200px;height:8px;background:#f0f0f8;border-radius:4px;overflow:hidden;margin:0 auto 10px;
 }
 #dlProgress .prog-bar{
-  height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--accent));
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#a855f7,#f472b6);
   border-radius:4px;transition:width .3s;
 }
-#dlProgress .prog-text{font-size:13px;color:var(--text-dim)}
+#dlProgress .prog-text{font-size:13px;color:#999}
 
+/* ══ 반응형 ══ */
 @media(max-width:360px){
-  #appHeader{padding:8px 8px}
-  .app-logo .logo-icon{width:26px;height:26px;font-size:14px;border-radius:7px}
-  .app-logo .logo-text{font-size:12px}
-  .header-btns{gap:4px}
-  .btn-gem{padding:5px 8px;font-size:10px;gap:3px}
-  #topBar{padding:4px 5px;gap:4px}
-  .top-row{gap:4px}.preset-row{gap:3px}
-  .btn{padding:6px 8px;font-size:12px}
-  .btn-preset{padding:5px 9px;font-size:11px}
-  .btn-sm{width:20px;height:20px;font-size:9px}
-  .num-control input[type=number]{width:22px;font-size:13px}
-  .lbl{font-size:11px}
+  .home-title{font-size:24px}
+  .gem-icon{width:60px;height:60px;font-size:34px;border-radius:16px}
+  .menu-card{padding:16px 20px 16px 70px;min-height:66px;border-radius:18px}
+  .menu-card .card-emoji{width:44px;height:44px;font-size:26px;left:14px;border-radius:14px}
+  .menu-card .card-text{font-size:16px}
+  .ed-btn{padding:6px 10px;font-size:12px}
+  .ed-preset{padding:5px 9px;font-size:11px}
+  .ed-sm{width:22px;height:22px;font-size:10px}
+  .ed-num input[type=number]{width:22px;font-size:13px}
 }
 @media(min-width:601px){
-  #appHeader{padding:12px 20px}
-  .app-logo .logo-icon{width:38px;height:38px;font-size:22px;border-radius:12px}
-  .app-logo .logo-text{font-size:18px}
-  .header-btns{gap:8px}
-  .btn-gem{padding:9px 18px;font-size:13px;gap:6px}
-  #topBar{padding:10px 16px;gap:8px}
-  .top-row{gap:10px}.preset-row{gap:8px}
-  .btn{padding:10px 18px;font-size:15px}
-  .btn-preset{padding:8px 16px;font-size:14px}
-  .btn-sm{width:28px;height:28px;font-size:12px}
-  .num-control input[type=number]{width:30px;font-size:16px}
-  .lbl{font-size:13px}
+  .home-header{padding:48px 20px 16px}
+  .gem-icon{width:88px;height:88px;font-size:50px;border-radius:24px}
+  .home-title{font-size:34px}
+  .home-sub{font-size:15px}
+  .menu-list{max-width:500px;gap:16px;padding:28px 20px 0}
+  .menu-card{padding:24px 28px 24px 90px;min-height:86px;border-radius:24px}
+  .menu-card .card-emoji{width:58px;height:58px;font-size:34px;left:18px}
+  .menu-card .card-text{font-size:20px}
+  .menu-card .card-sub{font-size:12px}
+  .ed-btn{padding:10px 18px;font-size:15px}
+  .ed-preset{padding:8px 16px;font-size:14px}
+  .ed-sm{width:28px;height:28px;font-size:12px}
+  .ed-num input[type=number]{width:30px;font-size:16px}
   #galleryScroll{padding:14px}#galleryGrid{gap:6px}
   .img-num{font-size:12px;padding:2px 7px;top:5px;left:5px}
-  .img-hint{font-size:11px;padding:16px 0 6px}
-  .img-saved span{font-size:15px;padding:5px 14px}
-  #statusBar{font-size:12px;padding:8px 16px}
-  #galleryHeader{padding:12px 18px}#galleryHeader h2{font-size:16px}
-  #galleryBottom .btn{font-size:14px;padding:10px 10px}
-  #overlay .icon{font-size:64px}#overlay .txt{font-size:16px}
 }
 @media(min-width:1024px){
+  .menu-list{max-width:560px}
   #galleryScroll{padding:20px;max-width:1100px;margin:0 auto;width:100%}
   #galleryGrid{gap:8px}
 }
 @media(max-height:400px) and (orientation:landscape){
-  #appHeader{padding:4px 10px}
-  .app-logo .logo-icon{width:22px;height:22px;font-size:13px}
-  .app-logo .logo-text{font-size:11px}
-  .btn-gem{padding:4px 8px;font-size:9px}
-  #topBar{padding:3px 8px;gap:3px;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center}
-  .top-row,.preset-row{gap:4px}
-  .btn{padding:5px 8px;font-size:11px}
-  .btn-preset{padding:4px 8px;font-size:10px}
-  .btn-sm{width:18px;height:18px;font-size:8px}
-  .num-control input[type=number]{font-size:12px}
-  .lbl{font-size:10px}
+  .home-header{padding:16px 20px 4px}
+  .gem-icon{width:44px;height:44px;font-size:26px}
+  .home-title{font-size:20px}
+  .menu-list{gap:8px;padding:10px 20px 0}
+  .menu-card{padding:12px 16px 12px 60px;min-height:50px;border-radius:14px}
+  .menu-card .card-emoji{width:36px;height:36px;font-size:22px;left:10px;border-radius:10px}
+  .menu-card .card-text{font-size:14px}
+  .nav-bar{padding:6px 10px}
+  #editorBar{padding:4px 8px;gap:3px}
+  .ed-btn{padding:5px 8px;font-size:11px}
+  .ed-preset{padding:4px 8px;font-size:10px}
   #statusBar{padding:4px 8px;font-size:10px}
-  #galleryHeader{padding:6px 10px}#galleryBottom{padding:5px 8px}
 }
 
-#particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-#particles i{
-  position:absolute;width:4px;height:4px;background:var(--primary);
-  border-radius:50%;opacity:0;animation:float 6s infinite ease-in-out;
+/* 배경 데코 */
+#screen-home::before{
+  content:'';position:absolute;top:-80px;right:-80px;
+  width:250px;height:250px;
+  background:radial-gradient(circle,rgba(168,85,247,.08) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;
 }
-#particles i:nth-child(1){left:10%;animation-delay:0s;animation-duration:7s}
-#particles i:nth-child(2){left:25%;animation-delay:1.2s;animation-duration:5s}
-#particles i:nth-child(3){left:40%;animation-delay:.5s;animation-duration:8s}
-#particles i:nth-child(4){left:55%;animation-delay:2s;animation-duration:6s}
-#particles i:nth-child(5){left:70%;animation-delay:.8s;animation-duration:7.5s}
-#particles i:nth-child(6){left:85%;animation-delay:1.5s;animation-duration:5.5s}
-#particles i:nth-child(7){left:15%;animation-delay:2.5s;animation-duration:6.5s;background:var(--accent)}
-#particles i:nth-child(8){left:60%;animation-delay:.3s;animation-duration:8.5s;background:var(--accent2)}
-@keyframes float{
-  0%{transform:translateY(100vh) scale(0);opacity:0}
-  20%{opacity:.4}80%{opacity:.2}
-  100%{transform:translateY(-20vh) scale(1);opacity:0}
+#screen-home::after{
+  content:'';position:absolute;bottom:-60px;left:-60px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(56,189,248,.08) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;
 }
 </style>
 </head>
 <body>
 
-<div id="particles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-
+<!-- 진행 오버레이 -->
 <div id="dlProgress">
   <div class="prog-box">
     <div class="prog-title">⬇️ 저장 중...</div>
@@ -321,54 +433,88 @@ body{
   </div>
 </div>
 
-<div id="appHeader">
-  <div class="app-logo">
-    <div class="logo-icon">😎</div>
-    <span class="logo-text">나만의 이모티콘 만들기</span>
+<!-- ══════════════════════════════
+     홈 화면
+     ══════════════════════════════ -->
+<div id="screen-home" class="screen active">
+  <div class="home-header">
+    <div class="gem-icon">💎</div>
+    <div class="home-title">젬 있는 세상</div>
+    <div class="home-sub">모두의 젬 공유 플랫폼</div>
   </div>
-  <div class="header-btns">
-    <a class="btn-gem btn-gem-cyan" href="https://gemini.google.com/gem/1AJdDfAyaB1x60PV0gjAdSaeBoityoLbB?usp=sharing" target="_blank" rel="noopener">
-      🎭 캐릭터 메이커
-    </a>
-    <a class="btn-gem btn-gem-pink" href="https://gemini.google.com/gem/1iYKFc8k1AyT5v4kTHuqPHYd1zpIp6zo9?usp=sharing" target="_blank" rel="noopener">
-      ✨ 이모티콘 만들기
-    </a>
+
+  <div class="menu-list">
+    <button class="menu-card card-purple" onclick="openGem('character')">
+      <div class="card-emoji">🎨</div>
+      <div>
+        <div class="card-text">캐릭터 메이커</div>
+        <div class="card-sub">나만의 캐릭터를 만들어보세요</div>
+      </div>
+    </button>
+
+    <button class="menu-card card-pink" onclick="openGem('emoticon')">
+      <div class="card-emoji">😆</div>
+      <div>
+        <div class="card-text">이모티콘 메이커</div>
+        <div class="card-sub">귀여운 이모티콘을 생성해요</div>
+      </div>
+    </button>
+
+    <button class="menu-card card-amber" onclick="goScreen('screen-editor')">
+      <div class="card-emoji">✂️</div>
+      <div>
+        <div class="card-text">이모티콘 자르기</div>
+        <div class="card-sub">이미지를 분할해서 저장해요</div>
+      </div>
+    </button>
+  </div>
+
+  <div class="home-footer">
+    ✦ 새로운 젬이 계속 추가됩니다 ✦
   </div>
 </div>
 
-<div id="topBar">
-  <div class="top-row">
-    <button class="btn btn-blue" onclick="openImage()">📂 열기</button>
-    <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="loadImage(event)">
-    <div class="sep"></div>
-    <span class="lbl">열</span>
-    <div class="num-control">
-      <button class="btn-sm" onclick="adjustVal('cols',-1)">◀</button>
-      <input type="number" id="cols" value="4" min="1" max="20" inputmode="numeric">
-      <button class="btn-sm" onclick="adjustVal('cols',1)">▶</button>
-    </div>
-    <span class="lbl">행</span>
-    <div class="num-control">
-      <button class="btn-sm" onclick="adjustVal('rows',-1)">◀</button>
-      <input type="number" id="rows" value="5" min="1" max="20" inputmode="numeric">
-      <button class="btn-sm" onclick="adjustVal('rows',1)">▶</button>
-    </div>
-    <div class="sep"></div>
-    <button class="btn btn-red" onclick="splitImage()">✂️ 분할</button>
+<!-- ══════════════════════════════
+     이모티콘 자르기 — 편집 화면
+     ══════════════════════════════ -->
+<div id="screen-editor" class="screen">
+  <div class="nav-bar">
+    <button class="nav-back" onclick="goScreen('screen-home')">←</button>
+    <div class="nav-title">✂️ 이모티콘 자르기</div>
   </div>
-  <div class="preset-row">
-    <button class="btn btn-preset" data-cols="2" data-rows="2" onclick="applyPreset(this)">2×2</button>
-    <button class="btn btn-preset" data-cols="2" data-rows="3" onclick="applyPreset(this)">2×3</button>
-    <button class="btn btn-preset" data-cols="3" data-rows="3" onclick="applyPreset(this)">3×3</button>
-    <button class="btn btn-preset" data-cols="3" data-rows="4" onclick="applyPreset(this)">3×4</button>
-    <button class="btn btn-preset active" data-cols="4" data-rows="5" onclick="applyPreset(this)">4×5</button>
-  </div>
-</div>
 
-<div id="screen-canvas">
+  <div id="editorBar">
+    <div class="ed-row">
+      <button class="ed-btn ed-btn-blue" onclick="openImage()">📂 열기</button>
+      <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="loadImage(event)">
+      <div class="ed-sep"></div>
+      <span class="ed-lbl">열</span>
+      <div class="ed-num">
+        <button class="ed-sm" onclick="adjustVal('cols',-1)">◀</button>
+        <input type="number" id="cols" value="4" min="1" max="20" inputmode="numeric">
+        <button class="ed-sm" onclick="adjustVal('cols',1)">▶</button>
+      </div>
+      <span class="ed-lbl">행</span>
+      <div class="ed-num">
+        <button class="ed-sm" onclick="adjustVal('rows',-1)">◀</button>
+        <input type="number" id="rows" value="5" min="1" max="20" inputmode="numeric">
+        <button class="ed-sm" onclick="adjustVal('rows',1)">▶</button>
+      </div>
+      <div class="ed-sep"></div>
+      <button class="ed-btn ed-btn-red" onclick="splitImage()">✂️ 분할</button>
+    </div>
+    <div class="ed-row">
+      <button class="ed-preset" data-cols="2" data-rows="2" onclick="applyPreset(this)">2×2</button>
+      <button class="ed-preset" data-cols="2" data-rows="3" onclick="applyPreset(this)">2×3</button>
+      <button class="ed-preset" data-cols="3" data-rows="3" onclick="applyPreset(this)">3×3</button>
+      <button class="ed-preset" data-cols="3" data-rows="4" onclick="applyPreset(this)">3×4</button>
+      <button class="ed-preset active" data-cols="4" data-rows="5" onclick="applyPreset(this)">4×5</button>
+    </div>
+  </div>
+
   <div id="canvasWrap">
     <div id="overlay">
-      <div class="icon">🎨</div>
+      <div class="icon">🖼️</div>
       <div class="txt"><strong>이미지를 열거나 드래그</strong>하세요<br>분할해서 이모티콘으로 저장!</div>
     </div>
     <canvas id="mainCanvas"></canvas>
@@ -376,7 +522,10 @@ body{
   <div id="statusBar">준비 완료 — 이미지를 열어주세요!</div>
 </div>
 
-<div id="screen-gallery">
+<!-- ══════════════════════════════
+     이모티콘 자르기 — 갤러리 화면
+     ══════════════════════════════ -->
+<div id="screen-gallery" class="screen">
   <div id="galleryHeader">
     <h2>🖼️ 분할 결과</h2>
     <span id="saveCount"></span>
@@ -385,13 +534,27 @@ body{
     <div id="galleryGrid"></div>
   </div>
   <div id="galleryBottom">
-    <button class="btn btn-blue" onclick="showCanvas()">← 편집</button>
-    <button class="btn btn-green" onclick="downloadAllSeq()">⬇️ 하나씩 저장</button>
-    <button class="btn btn-amber" onclick="downloadZip()">📦 ZIP 저장</button>
+    <button class="ed-btn ed-btn-blue" onclick="goScreen('screen-editor')">← 편집</button>
+    <button class="ed-btn ed-btn-green" onclick="downloadAllSeq()">⬇️ 하나씩 저장</button>
+    <button class="ed-btn ed-btn-amber" onclick="downloadZip()">📦 ZIP 저장</button>
   </div>
 </div>
 
 <script>
+/* ══ 화면 전환 ══ */
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ══ 외부 Gem 열기 ══ */
+const GEM_URLS={
+  character:'https://gemini.google.com/gem/1AJdDfAyaB1x60PV0gjAdSaeBoityoLbB?usp=sharing',
+  emoticon:'https://gemini.google.com/gem/1iYKFc8k1AyT5v4kTHuqPHYd1zpIp6zo9?usp=sharing',
+};
+function openGem(key){window.open(GEM_URLS[key],'_blank')}
+
+/* ══ 편집기 로직 ══ */
 const canvas=document.getElementById('mainCanvas');
 const ctx=canvas.getContext('2d');
 const wrap=document.getElementById('canvasWrap');
@@ -408,7 +571,7 @@ let isDownloading=false;
 function applyPreset(btn){
   document.getElementById('cols').value=btn.dataset.cols;
   document.getElementById('rows').value=btn.dataset.rows;
-  document.querySelectorAll('.btn-preset').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.ed-preset').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');resetLines();
 }
 function adjustVal(id,delta){
@@ -419,7 +582,7 @@ function adjustVal(id,delta){
 function syncPreset(){
   const c=parseInt(document.getElementById('cols').value)||0;
   const r=parseInt(document.getElementById('rows').value)||0;
-  document.querySelectorAll('.btn-preset').forEach(btn=>{
+  document.querySelectorAll('.ed-preset').forEach(btn=>{
     btn.classList.toggle('active',parseInt(btn.dataset.cols)===c&&parseInt(btn.dataset.rows)===r);
   });
 }
@@ -462,12 +625,12 @@ function redraw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   if(!origImg)return;
   ctx.drawImage(origImg,offsetX,offsetY,dispW,dispH);
-  ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=1;
+  ctx.strokeStyle='#ccc';ctx.lineWidth=1;
   ctx.strokeRect(offsetX,offsetY,dispW,dispH);
   ctx.lineWidth=2;ctx.setLineDash([8,4]);
   ctx.strokeStyle='#38bdf8';
   hLines.forEach(y=>{ctx.beginPath();ctx.moveTo(offsetX,y);ctx.lineTo(offsetX+dispW,y);ctx.stroke()});
-  ctx.strokeStyle='#fbbf24';
+  ctx.strokeStyle='#f59e0b';
   vLines.forEach(x=>{ctx.beginPath();ctx.moveTo(x,offsetY);ctx.lineTo(x,offsetY+dispH);ctx.stroke()});
   ctx.setLineDash([]);
   const aY=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
@@ -536,18 +699,8 @@ function splitImage(){
       tc.drawImage(origImg,x,y,w,h,0,0,w,h);
       tiles.push({url:tmp.toDataURL('image/png'),w,h});
     }
-  savedSet=new Set();showGallery();
-}
-
-function showCanvas(){
-  document.getElementById('screen-canvas').style.display='flex';
-  document.getElementById('screen-gallery').style.display='none';
-  document.getElementById('topBar').style.display='flex';
-}
-function showGallery(){
-  document.getElementById('screen-canvas').style.display='none';
-  document.getElementById('screen-gallery').style.display='flex';
-  document.getElementById('topBar').style.display='none';
+  savedSet=new Set();
+  goScreen('screen-gallery');
   buildGallery();
 }
 
@@ -581,11 +734,8 @@ function downloadOne(i){
   const blob=dataURLtoBlob(tiles[i].url);
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=url;
-  a.download=`emoticon_${String(i+1).padStart(2,'0')}.png`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  a.href=url;a.download=`emoticon_${String(i+1).padStart(2,'0')}.png`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(url),1000);
   savedSet.add(i);
   document.getElementById(`img-${i}`).classList.add('saved');
@@ -593,28 +743,23 @@ function downloadOne(i){
 }
 
 async function downloadAllSeq(){
-  if(isDownloading)return;
-  isDownloading=true;
+  if(isDownloading)return;isDownloading=true;
   const prog=document.getElementById('dlProgress');
   const bar=document.getElementById('progBar');
   const txt=document.getElementById('progText');
-  prog.style.display='flex';
-  const total=tiles.length;
+  prog.style.display='flex';const total=tiles.length;
   for(let i=0;i<total;i++){
     bar.style.width=`${((i+1)/total)*100}%`;
     txt.textContent=`${i+1} / ${total}`;
-    downloadOne(i);
-    await new Promise(r=>setTimeout(r,800));
+    downloadOne(i);await new Promise(r=>setTimeout(r,800));
   }
   txt.textContent='완료!';
   await new Promise(r=>setTimeout(r,600));
-  prog.style.display='none';
-  isDownloading=false;
+  prog.style.display='none';isDownloading=false;
 }
 
 async function downloadZip(){
-  if(isDownloading)return;
-  isDownloading=true;
+  if(isDownloading)return;isDownloading=true;
   const prog=document.getElementById('dlProgress');
   const bar=document.getElementById('progBar');
   const txt=document.getElementById('progText');
@@ -648,9 +793,7 @@ async function downloadZip(){
   a.href=url;a.download='emoticons.zip';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(url),3000);
-  tiles.forEach((_,i)=>{
-    savedSet.add(i);document.getElementById(`img-${i}`).classList.add('saved');
-  });
+  tiles.forEach((_,i)=>{savedSet.add(i);document.getElementById(`img-${i}`).classList.add('saved')});
   updateSaveCount();
   txt.textContent='완료!';
   await new Promise(r=>setTimeout(r,600));
