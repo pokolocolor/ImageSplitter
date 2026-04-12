@@ -22,7 +22,6 @@
   --text-dim:#94a3b8;
   --text-sub:#cbd5e1;
   --border:rgba(124,58,237,.25);
-  --glow:rgba(124,58,237,.15);
   --safe-bottom:env(safe-area-inset-bottom, 0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -34,92 +33,69 @@ body{
   user-select:none;-webkit-user-select:none;
 }
 
-/* ── 앱 헤더 ── */
 #appHeader{
   background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
-  padding:10px 14px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;
-  border-bottom:1px solid var(--border);
-  box-shadow:0 2px 20px rgba(124,58,237,.1);
-  z-index:20;
+  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;border-bottom:1px solid var(--border);
+  box-shadow:0 2px 20px rgba(124,58,237,.1);z-index:20;
 }
-.app-logo{
-  display:flex;align-items:center;gap:8px;
-}
+.app-logo{display:flex;align-items:center;gap:8px}
 .app-logo .logo-icon{
   width:32px;height:32px;
   background:linear-gradient(135deg,var(--primary),var(--accent));
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;
-  box-shadow:0 2px 12px rgba(124,58,237,.3);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;box-shadow:0 2px 12px rgba(124,58,237,.3);
 }
 .app-logo .logo-text{
   font-size:15px;font-weight:800;
   background:linear-gradient(135deg,var(--primary-light),var(--accent));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-  letter-spacing:-0.3px;
+  background-clip:text;letter-spacing:-0.3px;
 }
+
+.header-btns{display:flex;gap:6px;align-items:center}
 
 .btn-gem{
-  padding:7px 14px;border:none;border-radius:20px;
-  background:linear-gradient(135deg,var(--accent),#e879a8);
-  color:#fff;font-size:12px;font-weight:700;
-  cursor:pointer;white-space:nowrap;
-  box-shadow:0 2px 12px rgba(244,114,182,.3);
+  padding:7px 12px;border:none;border-radius:20px;
+  color:#fff;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;
   transition:all .2s;touch-action:manipulation;
-  display:flex;align-items:center;gap:5px;
-  text-decoration:none;
+  display:flex;align-items:center;gap:4px;text-decoration:none;
 }
 .btn-gem:active{transform:scale(.94);opacity:.8}
+.btn-gem-pink{
+  background:linear-gradient(135deg,var(--accent),#e879a8);
+  box-shadow:0 2px 10px rgba(244,114,182,.3);
+}
+.btn-gem-cyan{
+  background:linear-gradient(135deg,var(--accent2),#0ea5e9);
+  box-shadow:0 2px 10px rgba(56,189,248,.3);
+}
 
-/* ── 상단바 (편집 도구) ── */
 #topBar{
-  background:var(--bar-bg);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:6px 8px;
-  display:flex;flex-direction:column;gap:5px;
-  box-shadow:0 2px 16px rgba(0,0,0,.3);
-  z-index:10;flex-shrink:0;
+  background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  padding:6px 8px;display:flex;flex-direction:column;gap:5px;
+  box-shadow:0 2px 16px rgba(0,0,0,.3);z-index:10;flex-shrink:0;
   border-bottom:1px solid var(--border);
 }
-.top-row{
-  display:flex;align-items:center;gap:6px;
-  justify-content:center;flex-wrap:nowrap;
-}
-.preset-row{
-  display:flex;align-items:center;gap:5px;justify-content:center;
-}
+.top-row{display:flex;align-items:center;gap:6px;justify-content:center;flex-wrap:nowrap}
+.preset-row{display:flex;align-items:center;gap:5px;justify-content:center}
 
-/* ── 버튼 ── */
 .btn{
   padding:7px 12px;border:none;border-radius:10px;
   font-family:inherit;font-size:13px;font-weight:700;
-  cursor:pointer;white-space:nowrap;
-  transition:all .15s;touch-action:manipulation;
+  cursor:pointer;white-space:nowrap;transition:all .15s;touch-action:manipulation;
 }
 .btn:active{opacity:.7;transform:scale(.94)}
-.btn-blue{
-  background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;
-  box-shadow:0 2px 8px rgba(59,130,246,.25);
-}
-.btn-red{
-  background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;
-  box-shadow:0 2px 8px rgba(239,68,68,.25);
-}
-.btn-green{
-  background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;
-  box-shadow:0 2px 8px rgba(34,197,94,.25);
-}
+.btn-blue{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;box-shadow:0 2px 8px rgba(59,130,246,.25)}
+.btn-red{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 2px 8px rgba(239,68,68,.25)}
+.btn-green{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 2px 8px rgba(34,197,94,.25)}
+.btn-amber{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;box-shadow:0 2px 8px rgba(245,158,11,.25)}
 
 .btn-preset{
   background:var(--bg-card);color:var(--primary-light);
   font-size:12px;padding:6px 12px;
   border:1.5px solid var(--border);border-radius:20px;
-  font-weight:700;cursor:pointer;
-  transition:all .15s;touch-action:manipulation;
+  font-weight:700;cursor:pointer;transition:all .15s;touch-action:manipulation;
 }
 .btn-preset:active{opacity:.7;transform:scale(.94)}
 .btn-preset.active{
@@ -129,20 +105,16 @@ body{
 }
 
 .btn-sm{
-  width:22px;height:22px;padding:0;
-  border:none;border-radius:6px;
+  width:22px;height:22px;padding:0;border:none;border-radius:6px;
   background:var(--bg-card);color:var(--text-sub);
-  font-size:10px;line-height:1;
-  cursor:pointer;display:flex;
-  align-items:center;justify-content:center;
-  touch-action:manipulation;flex-shrink:0;
-  border:1px solid var(--border);
+  font-size:10px;line-height:1;cursor:pointer;display:flex;
+  align-items:center;justify-content:center;touch-action:manipulation;
+  flex-shrink:0;border:1px solid var(--border);
 }
 .btn-sm:active{background:var(--primary-dark);color:#fff}
 
 .lbl{font-size:12px;color:var(--text-dim);white-space:nowrap}
 
-/* ── 숫자 컨트롤 ── */
 .num-control{
   display:flex;align-items:center;gap:2px;
   background:var(--bg-card);border-radius:8px;
@@ -159,7 +131,6 @@ body{
 
 .sep{width:1px;height:22px;background:var(--border);flex-shrink:0}
 
-/* ── 캔버스 화면 ── */
 #screen-canvas{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 #canvasWrap{
   flex:1;display:flex;align-items:center;justify-content:center;
@@ -172,38 +143,28 @@ body{
   align-items:center;justify-content:center;gap:16px;
   color:#4a4a6a;pointer-events:none;text-align:center;padding:20px;
 }
-#overlay .icon{
-  font-size:56px;
-  filter:drop-shadow(0 4px 12px rgba(124,58,237,.2));
-}
+#overlay .icon{font-size:56px;filter:drop-shadow(0 4px 12px rgba(124,58,237,.2))}
 #overlay .txt{font-size:14px;line-height:1.8;color:#5a5a7a}
 #overlay .txt strong{color:var(--primary-light)}
 
 #statusBar{
-  background:var(--bar-bg);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:6px 12px;
-  padding-bottom:calc(6px + var(--safe-bottom));
+  background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  padding:6px 12px;padding-bottom:calc(6px + var(--safe-bottom));
   font-size:11px;color:var(--text-dim);
   border-top:1px solid var(--border);flex-shrink:0;
 }
 
-/* ── 갤러리 화면 ── */
 #screen-gallery{flex:1;display:none;flex-direction:column;overflow:hidden;min-height:0}
 #galleryHeader{
-  background:var(--bar-bg);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:10px 14px;
-  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;
   flex-shrink:0;box-shadow:0 2px 16px rgba(0,0,0,.3);
   border-bottom:1px solid var(--border);
 }
 #galleryHeader h2{font-size:14px;font-weight:700}
 #saveCount{
-  font-size:11px;
-  color:var(--accent2);
-  background:rgba(56,189,248,.1);
-  padding:3px 10px;border-radius:20px;
+  font-size:11px;color:var(--accent2);
+  background:rgba(56,189,248,.1);padding:3px 10px;border-radius:20px;
 }
 
 #galleryScroll{
@@ -216,105 +177,107 @@ body{
 .img-item{
   position:relative;width:100%;background:#000;
   border-radius:6px;cursor:pointer;overflow:hidden;
-  border:1px solid rgba(124,58,237,.1);
-  transition:border-color .2s;
+  border:1px solid rgba(124,58,237,.1);transition:border-color .2s;
 }
 .img-item:active{border-color:var(--primary-light)}
-.img-item img{
-  width:100%;height:100%;object-fit:cover;display:block;
-  transition:opacity .2s;
-}
+.img-item img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
 .img-num{
   position:absolute;top:3px;left:3px;
   background:rgba(0,0,0,.75);color:#fff;
-  font-size:10px;font-weight:700;
-  padding:1px 5px;border-radius:4px;
-  pointer-events:none;z-index:2;
-  backdrop-filter:blur(4px);
+  font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px;
+  pointer-events:none;z-index:2;backdrop-filter:blur(4px);
 }
 .img-hint{
   position:absolute;bottom:0;left:0;right:0;
   background:linear-gradient(transparent,rgba(0,0,0,.85));
-  color:#fff;font-size:9px;font-weight:700;
-  text-align:center;padding:12px 0 4px;
-  pointer-events:none;z-index:2;transition:opacity .3s;
+  color:#fff;font-size:9px;font-weight:700;text-align:center;
+  padding:12px 0 4px;pointer-events:none;z-index:2;transition:opacity .3s;
 }
 .img-saved{
   display:none;position:absolute;inset:0;
-  background:rgba(34,197,94,.2);
-  align-items:center;justify-content:center;
+  background:rgba(34,197,94,.2);align-items:center;justify-content:center;
   pointer-events:none;z-index:3;
 }
 .img-saved span{
   background:rgba(34,197,94,.9);color:#fff;
-  font-size:12px;font-weight:700;
-  padding:3px 10px;border-radius:50px;
+  font-size:12px;font-weight:700;padding:3px 10px;border-radius:50px;
 }
 .img-item.saved .img-saved{display:flex}
 .img-item.saved .img-hint{opacity:0}
 .img-item.saved img{opacity:.65}
 
 #galleryBottom{
-  background:var(--bar-bg);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  padding:8px 10px;
-  padding-bottom:calc(8px + var(--safe-bottom));
-  display:flex;gap:8px;flex-shrink:0;
-  border-top:1px solid var(--border);
+  background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  padding:8px 10px;padding-bottom:calc(8px + var(--safe-bottom));
+  display:flex;gap:6px;flex-shrink:0;border-top:1px solid var(--border);
 }
-#galleryBottom .btn{flex:1;text-align:center}
+#galleryBottom .btn{flex:1;text-align:center;font-size:12px;padding:9px 6px}
 
-/* ══ 반응형 ══ */
+#dlProgress{
+  display:none;position:fixed;inset:0;z-index:100;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;flex-direction:column;gap:16px;
+}
+#dlProgress .prog-box{
+  background:var(--bg-card);border-radius:16px;padding:28px 36px;
+  text-align:center;border:1px solid var(--border);
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+}
+#dlProgress .prog-title{font-size:15px;font-weight:700;margin-bottom:12px}
+#dlProgress .prog-bar-wrap{
+  width:200px;height:8px;background:var(--bg-deep);border-radius:4px;overflow:hidden;margin:0 auto 10px;
+}
+#dlProgress .prog-bar{
+  height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--accent));
+  border-radius:4px;transition:width .3s;
+}
+#dlProgress .prog-text{font-size:13px;color:var(--text-dim)}
+
 @media(max-width:360px){
-  #appHeader{padding:8px 10px}
-  .app-logo .logo-icon{width:28px;height:28px;font-size:15px;border-radius:8px}
-  .app-logo .logo-text{font-size:13px}
-  .btn-gem{padding:6px 10px;font-size:11px}
+  #appHeader{padding:8px 8px}
+  .app-logo .logo-icon{width:26px;height:26px;font-size:14px;border-radius:7px}
+  .app-logo .logo-text{font-size:12px}
+  .header-btns{gap:4px}
+  .btn-gem{padding:5px 8px;font-size:10px;gap:3px}
   #topBar{padding:4px 5px;gap:4px}
-  .top-row{gap:4px}
-  .preset-row{gap:3px}
+  .top-row{gap:4px}.preset-row{gap:3px}
   .btn{padding:6px 8px;font-size:12px}
   .btn-preset{padding:5px 9px;font-size:11px}
   .btn-sm{width:20px;height:20px;font-size:9px}
   .num-control input[type=number]{width:22px;font-size:13px}
   .lbl{font-size:11px}
 }
-
 @media(min-width:601px){
   #appHeader{padding:12px 20px}
   .app-logo .logo-icon{width:38px;height:38px;font-size:22px;border-radius:12px}
   .app-logo .logo-text{font-size:18px}
-  .btn-gem{padding:9px 20px;font-size:14px}
+  .header-btns{gap:8px}
+  .btn-gem{padding:9px 18px;font-size:13px;gap:6px}
   #topBar{padding:10px 16px;gap:8px}
-  .top-row{gap:10px}
-  .preset-row{gap:8px}
+  .top-row{gap:10px}.preset-row{gap:8px}
   .btn{padding:10px 18px;font-size:15px}
   .btn-preset{padding:8px 16px;font-size:14px}
   .btn-sm{width:28px;height:28px;font-size:12px}
   .num-control input[type=number]{width:30px;font-size:16px}
   .lbl{font-size:13px}
-  #galleryScroll{padding:14px}
-  #galleryGrid{gap:6px}
+  #galleryScroll{padding:14px}#galleryGrid{gap:6px}
   .img-num{font-size:12px;padding:2px 7px;top:5px;left:5px}
   .img-hint{font-size:11px;padding:16px 0 6px}
   .img-saved span{font-size:15px;padding:5px 14px}
   #statusBar{font-size:12px;padding:8px 16px}
-  #galleryHeader{padding:12px 18px}
-  #galleryHeader h2{font-size:16px}
-  #overlay .icon{font-size:64px}
-  #overlay .txt{font-size:16px}
+  #galleryHeader{padding:12px 18px}#galleryHeader h2{font-size:16px}
+  #galleryBottom .btn{font-size:14px;padding:10px 10px}
+  #overlay .icon{font-size:64px}#overlay .txt{font-size:16px}
 }
-
 @media(min-width:1024px){
   #galleryScroll{padding:20px;max-width:1100px;margin:0 auto;width:100%}
   #galleryGrid{gap:8px}
 }
-
 @media(max-height:400px) and (orientation:landscape){
   #appHeader{padding:4px 10px}
-  .app-logo .logo-icon{width:24px;height:24px;font-size:14px}
-  .app-logo .logo-text{font-size:12px}
-  .btn-gem{padding:4px 10px;font-size:10px}
+  .app-logo .logo-icon{width:22px;height:22px;font-size:13px}
+  .app-logo .logo-text{font-size:11px}
+  .btn-gem{padding:4px 8px;font-size:9px}
   #topBar{padding:3px 8px;gap:3px;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center}
   .top-row,.preset-row{gap:4px}
   .btn{padding:5px 8px;font-size:11px}
@@ -323,55 +286,56 @@ body{
   .num-control input[type=number]{font-size:12px}
   .lbl{font-size:10px}
   #statusBar{padding:4px 8px;font-size:10px}
-  #galleryHeader{padding:6px 10px}
-  #galleryBottom{padding:5px 8px}
+  #galleryHeader{padding:6px 10px}#galleryBottom{padding:5px 8px}
 }
 
-/* ── 파티클 배경 (순수 CSS) ── */
-#particles{
-  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
-}
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 #particles i{
-  position:absolute;
-  width:4px;height:4px;
-  background:var(--primary);
-  border-radius:50%;
-  opacity:0;
-  animation:float 6s infinite ease-in-out;
+  position:absolute;width:4px;height:4px;background:var(--primary);
+  border-radius:50%;opacity:0;animation:float 6s infinite ease-in-out;
 }
 #particles i:nth-child(1){left:10%;animation-delay:0s;animation-duration:7s}
 #particles i:nth-child(2){left:25%;animation-delay:1.2s;animation-duration:5s}
-#particles i:nth-child(3){left:40%;animation-delay:0.5s;animation-duration:8s}
+#particles i:nth-child(3){left:40%;animation-delay:.5s;animation-duration:8s}
 #particles i:nth-child(4){left:55%;animation-delay:2s;animation-duration:6s}
-#particles i:nth-child(5){left:70%;animation-delay:0.8s;animation-duration:7.5s}
+#particles i:nth-child(5){left:70%;animation-delay:.8s;animation-duration:7.5s}
 #particles i:nth-child(6){left:85%;animation-delay:1.5s;animation-duration:5.5s}
 #particles i:nth-child(7){left:15%;animation-delay:2.5s;animation-duration:6.5s;background:var(--accent)}
-#particles i:nth-child(8){left:60%;animation-delay:0.3s;animation-duration:8.5s;background:var(--accent2)}
+#particles i:nth-child(8){left:60%;animation-delay:.3s;animation-duration:8.5s;background:var(--accent2)}
 @keyframes float{
   0%{transform:translateY(100vh) scale(0);opacity:0}
-  20%{opacity:.4}
-  80%{opacity:.2}
+  20%{opacity:.4}80%{opacity:.2}
   100%{transform:translateY(-20vh) scale(1);opacity:0}
 }
 </style>
 </head>
 <body>
 
-<!-- 배경 파티클 -->
 <div id="particles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
-<!-- ── 앱 헤더 ── -->
+<div id="dlProgress">
+  <div class="prog-box">
+    <div class="prog-title">⬇️ 저장 중...</div>
+    <div class="prog-bar-wrap"><div class="prog-bar" id="progBar"></div></div>
+    <div class="prog-text" id="progText">0 / 0</div>
+  </div>
+</div>
+
 <div id="appHeader">
   <div class="app-logo">
     <div class="logo-icon">😎</div>
     <span class="logo-text">나만의 이모티콘 만들기</span>
   </div>
-  <a class="btn-gem" href="https://gemini.google.com/gem/1iYKFc8k1AyT5v4kTHuqPHYd1zpIp6zo9?usp=sharing" target="_blank" rel="noopener">
-    ✨ 이모티콘 만들기
-  </a>
+  <div class="header-btns">
+    <a class="btn-gem btn-gem-cyan" href="https://gemini.google.com/gem/1AJdDfAyaB1x60PV0gjAdSaeBoityoLbB?usp=sharing" target="_blank" rel="noopener">
+      🎭 캐릭터 메이커
+    </a>
+    <a class="btn-gem btn-gem-pink" href="https://gemini.google.com/gem/1iYKFc8k1AyT5v4kTHuqPHYd1zpIp6zo9?usp=sharing" target="_blank" rel="noopener">
+      ✨ 이모티콘 만들기
+    </a>
+  </div>
 </div>
 
-<!-- ── 상단바 (편집 도구) ── -->
 <div id="topBar">
   <div class="top-row">
     <button class="btn btn-blue" onclick="openImage()">📂 열기</button>
@@ -401,22 +365,17 @@ body{
   </div>
 </div>
 
-<!-- ── 캔버스 화면 ── -->
 <div id="screen-canvas">
   <div id="canvasWrap">
     <div id="overlay">
       <div class="icon">🎨</div>
-      <div class="txt">
-        <strong>이미지를 열거나 드래그</strong>하세요<br>
-        분할해서 이모티콘으로 저장!
-      </div>
+      <div class="txt"><strong>이미지를 열거나 드래그</strong>하세요<br>분할해서 이모티콘으로 저장!</div>
     </div>
     <canvas id="mainCanvas"></canvas>
   </div>
   <div id="statusBar">준비 완료 — 이미지를 열어주세요!</div>
 </div>
 
-<!-- ── 갤러리 화면 ── -->
 <div id="screen-gallery">
   <div id="galleryHeader">
     <h2>🖼️ 분할 결과</h2>
@@ -427,7 +386,8 @@ body{
   </div>
   <div id="galleryBottom">
     <button class="btn btn-blue" onclick="showCanvas()">← 편집</button>
-    <button class="btn btn-green" onclick="downloadAll()">⬇️ 전체 저장</button>
+    <button class="btn btn-green" onclick="downloadAllSeq()">⬇️ 하나씩 저장</button>
+    <button class="btn btn-amber" onclick="downloadZip()">📦 ZIP 저장</button>
   </div>
 </div>
 
@@ -443,13 +403,13 @@ let hLines=[],vLines=[],dragging=null;
 const SNAP=22;
 let tiles=[],savedSet=new Set();
 let gridCols=4,gridRows=5;
+let isDownloading=false;
 
 function applyPreset(btn){
   document.getElementById('cols').value=btn.dataset.cols;
   document.getElementById('rows').value=btn.dataset.rows;
   document.querySelectorAll('.btn-preset').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  resetLines();
+  btn.classList.add('active');resetLines();
 }
 function adjustVal(id,delta){
   const inp=document.getElementById(id);
@@ -460,8 +420,7 @@ function syncPreset(){
   const c=parseInt(document.getElementById('cols').value)||0;
   const r=parseInt(document.getElementById('rows').value)||0;
   document.querySelectorAll('.btn-preset').forEach(btn=>{
-    btn.classList.toggle('active',
-      parseInt(btn.dataset.cols)===c&&parseInt(btn.dataset.rows)===r);
+    btn.classList.toggle('active',parseInt(btn.dataset.cols)===c&&parseInt(btn.dataset.rows)===r);
   });
 }
 
@@ -485,15 +444,11 @@ wrap.addEventListener('dragover',e=>e.preventDefault());
 wrap.addEventListener('drop',e=>{e.preventDefault();readFile(e.dataTransfer.files[0])});
 
 function fitCanvas(){
-  const pad=8;
-  const maxW=wrap.clientWidth-pad*2,maxH=wrap.clientHeight-pad*2;
+  const pad=8,maxW=wrap.clientWidth-pad*2,maxH=wrap.clientHeight-pad*2;
   scale=Math.min(maxW/origImg.width,maxH/origImg.height,1);
-  dispW=Math.floor(origImg.width*scale);
-  dispH=Math.floor(origImg.height*scale);
-  canvas.width=wrap.clientWidth;
-  canvas.height=wrap.clientHeight;
-  offsetX=Math.floor((canvas.width-dispW)/2);
-  offsetY=Math.floor((canvas.height-dispH)/2);
+  dispW=Math.floor(origImg.width*scale);dispH=Math.floor(origImg.height*scale);
+  canvas.width=wrap.clientWidth;canvas.height=wrap.clientHeight;
+  offsetX=Math.floor((canvas.width-dispW)/2);offsetY=Math.floor((canvas.height-dispH)/2);
 }
 function resetLines(){
   if(!origImg)return;
@@ -518,8 +473,7 @@ function redraw(){
   const aY=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
   const aX=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
   const fs=Math.max(9,Math.min(13,Math.min(dispW/aX.length/3,dispH/aY.length/3)));
-  ctx.font=`bold ${fs}px sans-serif`;
-  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font=`bold ${fs}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
   let n=1;
   for(let r=0;r<aY.length-1;r++)
     for(let c=0;c<aX.length-1;c++){
@@ -553,13 +507,11 @@ canvas.addEventListener('mousemove',e=>{
 canvas.addEventListener('mouseup',()=>dragging=null);
 canvas.addEventListener('mouseleave',()=>dragging=null);
 canvas.addEventListener('touchstart',e=>{
-  e.preventDefault();
-  const t=e.touches[0],r=canvas.getBoundingClientRect();
+  e.preventDefault();const t=e.touches[0],r=canvas.getBoundingClientRect();
   dragging=findLine(t.clientX-r.left,t.clientY-r.top);
 },{passive:false});
 canvas.addEventListener('touchmove',e=>{
-  e.preventDefault();
-  const t=e.touches[0],r=canvas.getBoundingClientRect();
+  e.preventDefault();const t=e.touches[0],r=canvas.getBoundingClientRect();
   moveLine(t.clientX-r.left,t.clientY-r.top);
 },{passive:false});
 canvas.addEventListener('touchend',()=>dragging=null);
@@ -570,11 +522,9 @@ function splitImage(){
   gridRows=parseInt(document.getElementById('rows').value)||5;
   const aYc=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
   const aXc=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
-  const toX=cx=>Math.round((cx-offsetX)/scale);
-  const toY=cy=>Math.round((cy-offsetY)/scale);
+  const toX=cx=>Math.round((cx-offsetX)/scale),toY=cy=>Math.round((cy-offsetY)/scale);
   const aY=aYc.map(toY),aX=aXc.map(toX);
-  const tmp=document.createElement('canvas');
-  const tc=tmp.getContext('2d');
+  const tmp=document.createElement('canvas'),tc=tmp.getContext('2d');
   tiles=[];
   for(let r=0;r<aY.length-1;r++)
     for(let c=0;c<aX.length-1;c++){
@@ -582,13 +532,11 @@ function splitImage(){
       const w=Math.min(origImg.width,aX[c+1])-x;
       const h=Math.min(origImg.height,aY[r+1])-y;
       if(w<=0||h<=0)continue;
-      tmp.width=w;tmp.height=h;
-      tc.clearRect(0,0,w,h);
+      tmp.width=w;tmp.height=h;tc.clearRect(0,0,w,h);
       tc.drawImage(origImg,x,y,w,h,0,0,w,h);
       tiles.push({url:tmp.toDataURL('image/png'),w,h});
     }
-  savedSet=new Set();
-  showGallery();
+  savedSet=new Set();showGallery();
 }
 
 function showCanvas(){
@@ -622,18 +570,93 @@ function buildGallery(){
   document.getElementById('galleryScroll').scrollTop=0;
 }
 
+function dataURLtoBlob(dataURL){
+  const arr=dataURL.split(','),mime=arr[0].match(/:(.*?);/)[1];
+  const bstr=atob(arr[1]);let n=bstr.length;const u8=new Uint8Array(n);
+  while(n--)u8[n]=bstr.charCodeAt(n);
+  return new Blob([u8],{type:mime});
+}
+
 function downloadOne(i){
+  const blob=dataURLtoBlob(tiles[i].url);
+  const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=tiles[i].url;a.download=`${i+1}.png`;a.click();
+  a.href=url;
+  a.download=`emoticon_${String(i+1).padStart(2,'0')}.png`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
   savedSet.add(i);
   document.getElementById(`img-${i}`).classList.add('saved');
   updateSaveCount();
 }
-async function downloadAll(){
-  for(let i=0;i<tiles.length;i++){
-    downloadOne(i);await new Promise(r=>setTimeout(r,300));
+
+async function downloadAllSeq(){
+  if(isDownloading)return;
+  isDownloading=true;
+  const prog=document.getElementById('dlProgress');
+  const bar=document.getElementById('progBar');
+  const txt=document.getElementById('progText');
+  prog.style.display='flex';
+  const total=tiles.length;
+  for(let i=0;i<total;i++){
+    bar.style.width=`${((i+1)/total)*100}%`;
+    txt.textContent=`${i+1} / ${total}`;
+    downloadOne(i);
+    await new Promise(r=>setTimeout(r,800));
   }
+  txt.textContent='완료!';
+  await new Promise(r=>setTimeout(r,600));
+  prog.style.display='none';
+  isDownloading=false;
 }
+
+async function downloadZip(){
+  if(isDownloading)return;
+  isDownloading=true;
+  const prog=document.getElementById('dlProgress');
+  const bar=document.getElementById('progBar');
+  const txt=document.getElementById('progText');
+  prog.style.display='flex';bar.style.width='0%';
+  txt.textContent='ZIP 준비 중...';
+  if(typeof JSZip==='undefined'){
+    try{
+      await new Promise((resolve,reject)=>{
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+        s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
+      });
+    }catch(e){
+      alert('ZIP 라이브러리를 불러올 수 없습니다.\n네트워크 연결을 확인해주세요.');
+      prog.style.display='none';isDownloading=false;return;
+    }
+  }
+  const zip=new JSZip();const total=tiles.length;
+  for(let i=0;i<total;i++){
+    zip.file(`emoticon_${String(i+1).padStart(2,'0')}.png`,dataURLtoBlob(tiles[i].url));
+    bar.style.width=`${((i+1)/total)*70}%`;
+    txt.textContent=`압축 중 ${i+1}/${total}`;
+  }
+  txt.textContent='ZIP 생성 중...';bar.style.width='85%';
+  const content=await zip.generateAsync({type:'blob'},meta=>{
+    bar.style.width=`${85+meta.percent*0.15}%`;
+  });
+  bar.style.width='100%';txt.textContent='다운로드 중...';
+  const url=URL.createObjectURL(content);
+  const a=document.createElement('a');
+  a.href=url;a.download='emoticons.zip';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),3000);
+  tiles.forEach((_,i)=>{
+    savedSet.add(i);document.getElementById(`img-${i}`).classList.add('saved');
+  });
+  updateSaveCount();
+  txt.textContent='완료!';
+  await new Promise(r=>setTimeout(r,600));
+  prog.style.display='none';isDownloading=false;
+}
+
 function updateSaveCount(){
   const total=tiles.length,saved=savedSet.size;
   document.getElementById('saveCount').textContent=
