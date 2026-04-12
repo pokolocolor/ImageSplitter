@@ -2,779 +2,455 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#f5f0ea">
 <title>젬 있는 세상</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+:root{
+  --bg:#f5f0ea;--bg-card:#fff;--text:#3a3226;--text-sub:#7a7062;--text-dim:#b0a898;
+  --primary:#c9a96e;--primary-light:#e8d5b0;--accent:#8b6b3d;
+  --border:#e0d6c8;--shadow:0 4px 20px rgba(60,50,30,.10);
+  --radius:18px;--safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"맑은 고딕","Apple SD Gothic Neo","Segoe UI",sans-serif;display:flex;flex-direction:column;height:100dvh;user-select:none;-webkit-user-select:none;}
 
-:root {
-  --bg:#f5f0ea;
-  --text:#333;
-  --text-dim:#999;
-  --safe-bottom:env(safe-area-inset-bottom, 0px);
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:var(--bg)}
-body{
-  background:var(--bg);color:var(--text);
-  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,"맑은 고딕",sans-serif;
-  display:flex;flex-direction:column;height:100dvh;
-  user-select:none;-webkit-user-select:none;
-}
+/* ─── screens ─── */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
 
-/* ══ 화면 전환 ══ */
-.screen{
-  position:absolute;inset:0;
-  display:none;flex-direction:column;overflow:hidden;
-  background:var(--bg);
-}
-.screen.active{display:flex}
+/* ─── HOME ─── */
+#screen-home{background:var(--bg);align-items:center;justify-content:flex-start;}
+.home-scroll{width:100%;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;align-items:center;padding:24px 16px calc(24px + var(--safe-bottom));gap:20px;}
+.logo-area{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:12px;}
+.logo-img{width:120px;height:120px;border-radius:28px;object-fit:cover;box-shadow:0 4px 24px rgba(120,90,40,.18);}
+.logo-title{font-size:26px;font-weight:900;color:var(--accent);letter-spacing:-0.5px;}
+.logo-sub{font-size:13px;color:var(--text-sub);font-weight:500;}
 
-/* ══════════════════════════════
-   홈 화면
-   ══════════════════════════════ */
-#screen-home{
-  align-items:center;justify-content:flex-start;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-}
+.menu-grid{width:100%;max-width:400px;display:flex;flex-direction:column;gap:14px;}
+.menu-card{display:flex;align-items:center;gap:16px;background:var(--bg-card);border-radius:var(--radius);padding:20px 18px;box-shadow:var(--shadow);border:1px solid var(--border);cursor:pointer;transition:transform .12s,box-shadow .15s;text-decoration:none;color:var(--text);touch-action:manipulation;}
+.menu-card:active{transform:scale(.97);box-shadow:0 2px 10px rgba(60,50,30,.08);}
+.card-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.card-icon.char{background:linear-gradient(135deg,#ffecd2,#fcb69f);}
+.card-icon.emoti{background:linear-gradient(135deg,#d4fc79,#96e6a1);}
+.card-icon.cut{background:linear-gradient(135deg,#a1c4fd,#c2e9fb);}
+.card-body{display:flex;flex-direction:column;gap:3px;}
+.card-title{font-size:16px;font-weight:800;color:var(--text);}
+.card-desc{font-size:12px;color:var(--text-sub);font-weight:500;}
+.card-arrow{margin-left:auto;font-size:18px;color:var(--text-dim);}
 
-.home-scroll{
-  width:100%;
-  display:flex;flex-direction:column;align-items:center;
-  padding:0 20px;
-  padding-bottom:calc(40px + var(--safe-bottom));
-}
+.footer-txt{font-size:11px;color:var(--text-dim);text-align:center;padding-bottom:4px;}
 
-.home-header{
-  padding:32px 0 0;text-align:center;
-  width:100%;
-}
-.logo-img{
-  width:180px;height:auto;
-  margin:0 auto 0;
-  display:block;
-  filter:drop-shadow(0 4px 12px rgba(0,0,0,.06));
-}
+/* ─── EDITOR ─── */
+#screen-editor{background:#f8f6f2;}
+#topBar{background:var(--bg-card);padding:6px 8px;display:flex;flex-direction:column;gap:5px;box-shadow:0 2px 8px rgba(60,50,30,.08);z-index:10;flex-shrink:0;border-bottom:1px solid var(--border);}
+.top-row,.preset-row{display:flex;align-items:center;gap:5px;justify-content:center;flex-wrap:nowrap;}
+.btn{padding:7px 12px;border:none;border-radius:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .12s,transform .08s;touch-action:manipulation;}
+.btn:active{opacity:.7;transform:scale(.94);}
+.btn-back{background:transparent;color:var(--accent);font-size:14px;font-weight:800;padding:7px 10px;}
+.btn-open{background:var(--primary);color:#fff;}
+.btn-split{background:#e07850;color:#fff;}
+.btn-preset{background:var(--primary-light);color:var(--accent);font-size:12px;padding:6px 12px;border:2px solid transparent;border-radius:10px;font-weight:700;cursor:pointer;transition:all .12s;touch-action:manipulation;}
+.btn-preset.active{background:var(--primary);color:#fff;border-color:var(--accent);box-shadow:0 0 6px rgba(201,169,110,.4);}
+.btn-sm{min-width:28px;min-height:28px;border:none;border-radius:7px;background:var(--border);color:var(--text);font-size:12px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;}
+.btn-sm:active{background:var(--primary-light);}
+.lbl{font-size:12px;color:var(--text-sub);white-space:nowrap;}
+.num-ctrl{display:flex;align-items:center;gap:2px;background:var(--bg);border-radius:8px;padding:2px 3px;border:1px solid var(--border);}
+.num-ctrl input[type=number]{width:26px;padding:2px 0;border:none;border-radius:4px;background:transparent;color:var(--text);font-size:15px;font-weight:700;text-align:center;font-family:inherit;-moz-appearance:textfield;}
+.num-ctrl input::-webkit-outer-spin-button,.num-ctrl input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.sep{width:1px;height:22px;background:var(--border);flex-shrink:0;}
 
-/* 메뉴 카드 */
-.menu-list{
-  width:100%;max-width:400px;
-  padding:28px 0 0;
-  display:flex;flex-direction:column;gap:14px;
-}
+#canvasArea{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f0ece4;}
+#mainCanvas{display:block;touch-action:none;}
+.overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(245,240,234,.85);gap:12px;pointer-events:none;}
+.overlay-icon{font-size:48px;}
+.overlay-msg{font-size:14px;color:var(--text-sub);font-weight:600;text-align:center;line-height:1.5;}
 
-.menu-card{
-  position:relative;
-  border-radius:50px;
-  padding:0 28px;
-  height:68px;
-  display:flex;align-items:center;
-  cursor:pointer;
-  overflow:hidden;
-  transition:transform .15s,box-shadow .2s;
-  text-decoration:none;
-  border:none;
-  font-family:inherit;
-  width:100%;
-  gap:14px;
-}
-.menu-card:active{transform:scale(.97)}
+#statusBar{background:var(--bg-card);padding:5px 10px;font-size:11px;color:var(--text-sub);text-align:center;border-top:1px solid var(--border);flex-shrink:0;}
 
-.menu-card .card-emoji{
-  width:46px;height:46px;
-  background:rgba(255,255,255,.45);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:26px;
-  flex-shrink:0;
-  box-shadow:0 2px 6px rgba(0,0,0,.06);
-}
+/* ─── GALLERY ─── */
+#screen-gallery{background:#f8f6f2;}
+.gal-header{background:var(--bg-card);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(60,50,30,.08);border-bottom:1px solid var(--border);flex-shrink:0;}
+.gal-title{font-size:15px;font-weight:800;color:var(--text);}
+.gal-count{font-size:12px;color:var(--text-sub);font-weight:600;background:var(--primary-light);padding:3px 10px;border-radius:20px;}
+.gal-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px;}
+.gal-grid{display:grid;gap:8px;}
+.gal-grid img{width:100%;border-radius:10px;border:2px solid var(--border);cursor:pointer;transition:transform .1s,border-color .15s;background:#fff;}
+.gal-grid img:active{transform:scale(.95);}
+.gal-grid img.saved{border-color:var(--primary);opacity:.75;}
+.gal-bottom{background:var(--bg-card);padding:8px 10px calc(8px + var(--safe-bottom));display:flex;gap:8px;justify-content:center;border-top:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;}
+.btn-gal{padding:10px 16px;border:none;border-radius:12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;transition:opacity .12s;}
+.btn-gal:active{opacity:.7;}
+.btn-gal.back{background:var(--border);color:var(--text);}
+.btn-gal.home{background:var(--primary-light);color:var(--accent);}
+.btn-gal.dl{background:var(--primary);color:#fff;}
+.btn-gal.zip{background:var(--accent);color:#fff;}
 
-.menu-card .card-body{
-  flex:1;min-width:0;
-}
-.menu-card .card-text{
-  font-size:17px;font-weight:800;color:#fff;
-  text-shadow:0 1px 3px rgba(0,0,0,.12);
-}
-.menu-card .card-sub{
-  font-size:11px;font-weight:400;color:rgba(255,255,255,.8);
-  margin-top:1px;
-}
+/* ─── Download progress ─── */
+#dlProgress{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:14px;}
+#dlProgress.show{display:flex;}
+.dl-box{background:var(--bg-card);border-radius:20px;padding:28px 32px;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:220px;box-shadow:0 8px 40px rgba(0,0,0,.25);}
+.dl-text{font-size:14px;font-weight:700;color:var(--text);}
+.dl-bar-bg{width:100%;height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
+.dl-bar{height:100%;background:var(--primary);border-radius:4px;transition:width .3s;}
 
-.menu-card .card-arrow{
-  font-size:18px;color:rgba(255,255,255,.6);flex-shrink:0;
-}
-
-/* 카드 빛 효과 */
-.menu-card::before{
-  content:'';position:absolute;
-  top:-40%;left:-20%;width:60%;height:180%;
-  background:linear-gradient(120deg,rgba(255,255,255,.25) 0%,transparent 50%);
-  pointer-events:none;
-}
-
-/* ── 카드 색상 ── */
-.card-purple{
-  background:linear-gradient(135deg,#c490f0,#9b6dd7,#7b4fbf);
-  box-shadow:0 4px 16px rgba(155,109,215,.35);
-}
-.card-pink{
-  background:linear-gradient(135deg,#f0a0d0,#e070b0,#c850a0);
-  box-shadow:0 4px 16px rgba(224,112,176,.3);
-}
-.card-amber{
-  background:linear-gradient(135deg,#ffd060,#f0a830,#e09020);
-  box-shadow:0 4px 16px rgba(240,168,48,.35);
-}
-.card-blue{
-  background:linear-gradient(135deg,#70c8f8,#40a0e0,#2878c8);
-  box-shadow:0 4px 16px rgba(64,160,224,.3);
-}
-.card-green{
-  background:linear-gradient(135deg,#80e0a0,#40c870,#28a858);
-  box-shadow:0 4px 16px rgba(64,200,112,.3);
-}
-
-.home-footer{
-  margin-top:32px;
-  font-size:11px;color:#ccc;text-align:center;
-  width:100%;
-}
-
-/* ══════════════════════════════
-   편집기 & 갤러리 공통
-   ══════════════════════════════ */
-.nav-bar{
-  background:linear-gradient(135deg,#40a0e0,#7b4fbf);
-  padding:10px 14px;
-  display:flex;align-items:center;gap:10px;
-  flex-shrink:0;
-  box-shadow:0 2px 12px rgba(64,160,224,.2);
-}
-.nav-back{
-  width:34px;height:34px;border:none;border-radius:12px;
-  background:rgba(255,255,255,.2);color:#fff;
-  font-size:18px;cursor:pointer;display:flex;
-  align-items:center;justify-content:center;
-  touch-action:manipulation;
-}
-.nav-back:active{background:rgba(255,255,255,.35)}
-.nav-title{font-size:16px;font-weight:800;color:#fff;flex:1}
-
-#editorBar{
-  background:#fff;
-  padding:6px 10px;
-  display:flex;flex-direction:column;gap:5px;
-  box-shadow:0 2px 10px rgba(0,0,0,.04);
-  z-index:10;flex-shrink:0;
-  border-bottom:1px solid #eee;
-}
-.ed-row{display:flex;align-items:center;gap:6px;justify-content:center;flex-wrap:nowrap}
-
-.ed-btn{
-  padding:7px 13px;border:none;border-radius:12px;
-  font-family:inherit;font-size:13px;font-weight:700;
-  cursor:pointer;white-space:nowrap;transition:all .12s;
-  touch-action:manipulation;
-}
-.ed-btn:active{opacity:.7;transform:scale(.94)}
-.ed-btn-blue{background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#fff;box-shadow:0 2px 6px rgba(59,130,246,.2)}
-.ed-btn-red{background:linear-gradient(135deg,#fb7185,#ef4444);color:#fff;box-shadow:0 2px 6px rgba(239,68,68,.2)}
-.ed-btn-green{background:linear-gradient(135deg,#4ade80,#22c55e);color:#fff;box-shadow:0 2px 6px rgba(34,197,94,.2)}
-.ed-btn-amber{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;box-shadow:0 2px 6px rgba(245,158,11,.2)}
-
-.ed-preset{
-  background:#f8f4ff;color:#7b4fbf;
-  font-size:12px;padding:6px 12px;
-  border:1.5px solid #e8d8f8;border-radius:20px;
-  font-weight:700;cursor:pointer;transition:all .12s;touch-action:manipulation;
-}
-.ed-preset:active{opacity:.7;transform:scale(.94)}
-.ed-preset.active{
-  background:linear-gradient(135deg,#9b6dd7,#7b4fbf);
-  color:#fff;border-color:#9b6dd7;
-  box-shadow:0 0 10px rgba(123,79,191,.25);
-}
-
-.ed-sm{
-  width:24px;height:24px;padding:0;border:none;border-radius:7px;
-  background:#f4f2f8;color:#666;font-size:11px;line-height:1;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  touch-action:manipulation;flex-shrink:0;border:1px solid #e8e4ee;
-}
-.ed-sm:active{background:#ddd}
-
-.ed-lbl{font-size:12px;color:#999;white-space:nowrap}
-
-.ed-num{
-  display:flex;align-items:center;gap:2px;
-  background:#faf8fc;border-radius:8px;
-  padding:2px 3px;border:1px solid #e8e4ee;
-}
-.ed-num input[type=number]{
-  width:24px;padding:1px 0;border:none;border-radius:4px;
-  background:transparent;color:#333;
-  font-size:14px;font-weight:700;text-align:center;
-  font-family:inherit;-moz-appearance:textfield;
-}
-.ed-num input::-webkit-outer-spin-button,
-.ed-num input::-webkit-inner-spin-button{-webkit-appearance:none}
-
-.ed-sep{width:1px;height:22px;background:#e8e4ee;flex-shrink:0}
-
-#canvasWrap{
-  flex:1;display:flex;align-items:center;justify-content:center;
-  overflow:hidden;position:relative;touch-action:none;min-height:0;
-  background:#f8f6f2;
-}
-#mainCanvas{display:block;cursor:crosshair;touch-action:none}
-#overlay{
-  position:absolute;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:16px;
-  color:#ccc;pointer-events:none;text-align:center;padding:20px;
-}
-#overlay .icon{font-size:56px}
-#overlay .txt{font-size:14px;line-height:1.8;color:#bbb}
-#overlay .txt strong{color:#9b6dd7}
-
-#statusBar{
-  background:#fff;padding:6px 12px;
-  padding-bottom:calc(6px + var(--safe-bottom));
-  font-size:11px;color:#bbb;
-  border-top:1px solid #eee;flex-shrink:0;
-}
-
-/* ══ 갤러리 ══ */
-#galleryHeader{
-  background:linear-gradient(135deg,#40a0e0,#7b4fbf);
-  padding:10px 14px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;box-shadow:0 2px 12px rgba(64,160,224,.2);
-}
-#galleryHeader h2{font-size:15px;font-weight:800;color:#fff}
-#saveCount{
-  font-size:11px;color:#fff;
-  background:rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;
-}
-
-#galleryScroll{
-  flex:1;overflow-y:auto;background:#f8f6f2;
-  -webkit-overflow-scrolling:touch;padding:8px;min-height:0;
-}
-#galleryGrid{display:grid;gap:4px;width:100%}
-
-.img-item{
-  position:relative;width:100%;background:#fff;
-  border-radius:8px;cursor:pointer;overflow:hidden;
-  border:2px solid #f0ece6;transition:border-color .2s;
-  box-shadow:0 2px 6px rgba(0,0,0,.04);
-}
-.img-item:active{border-color:#9b6dd7}
-.img-item img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
-.img-num{
-  position:absolute;top:3px;left:3px;
-  background:rgba(123,79,191,.85);color:#fff;
-  font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;
-  pointer-events:none;z-index:2;
-}
-.img-hint{
-  position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(transparent,rgba(0,0,0,.45));
-  color:#fff;font-size:9px;font-weight:700;text-align:center;
-  padding:12px 0 4px;pointer-events:none;z-index:2;transition:opacity .3s;
-}
-.img-saved{
-  display:none;position:absolute;inset:0;
-  background:rgba(34,197,94,.15);align-items:center;justify-content:center;
-  pointer-events:none;z-index:3;
-}
-.img-saved span{
-  background:rgba(34,197,94,.9);color:#fff;
-  font-size:12px;font-weight:700;padding:3px 10px;border-radius:50px;
-}
-.img-item.saved .img-saved{display:flex}
-.img-item.saved .img-hint{opacity:0}
-.img-item.saved img{opacity:.65}
-
-#galleryBottom{
-  background:#fff;padding:8px 10px;
-  padding-bottom:calc(8px + var(--safe-bottom));
-  display:flex;gap:6px;flex-shrink:0;border-top:1px solid #eee;
-}
-#galleryBottom .ed-btn{flex:1;text-align:center;font-size:12px;padding:10px 6px}
-
-/* 진행 오버레이 */
-#dlProgress{
-  display:none;position:fixed;inset:0;z-index:100;
-  background:rgba(245,240,234,.9);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;flex-direction:column;gap:16px;
-}
-#dlProgress .prog-box{
-  background:#fff;border-radius:20px;padding:28px 36px;
-  text-align:center;border:2px solid #f0ece6;
-  box-shadow:0 8px 32px rgba(0,0,0,.06);
-}
-#dlProgress .prog-title{font-size:15px;font-weight:700;margin-bottom:12px;color:#333}
-#dlProgress .prog-bar-wrap{
-  width:200px;height:8px;background:#f0ece6;border-radius:4px;overflow:hidden;margin:0 auto 10px;
-}
-#dlProgress .prog-bar{
-  height:100%;width:0%;
-  background:linear-gradient(90deg,#9b6dd7,#f0a0d0);
-  border-radius:4px;transition:width .3s;
-}
-#dlProgress .prog-text{font-size:13px;color:#999}
-
-/* ══ 반응형 ══ */
+/* ─── responsive ─── */
 @media(max-width:360px){
-  .logo-img{width:150px}
-  .menu-card{height:60px;padding:0 22px;gap:12px;border-radius:40px}
-  .menu-card .card-emoji{width:40px;height:40px;font-size:22px}
-  .menu-card .card-text{font-size:15px}
-  .menu-card .card-sub{font-size:10px}
-  .menu-list{gap:11px}
-  .ed-btn{padding:6px 10px;font-size:12px}
-  .ed-preset{padding:5px 9px;font-size:11px}
-  .ed-sm{width:22px;height:22px;font-size:10px}
-  .ed-num input[type=number]{width:22px;font-size:13px}
+  .logo-img{width:90px;height:90px;border-radius:22px;}
+  .logo-title{font-size:22px;}
+  .menu-card{padding:16px 14px;gap:12px;}
+  .card-icon{width:44px;height:44px;font-size:22px;}
+  .card-title{font-size:14px;}
+  #topBar{padding:4px 5px;gap:4px;}.top-row,.preset-row{gap:3px;}
+  .btn{padding:6px 9px;font-size:12px;}.btn-preset{padding:5px 9px;font-size:11px;}
+  .btn-sm{min-width:24px;min-height:24px;font-size:11px;}.num-ctrl input[type=number]{width:22px;font-size:14px;}
+  .lbl{font-size:11px;}
 }
 @media(min-width:601px){
-  .logo-img{width:220px}
-  .home-header{padding:48px 0 0}
-  .menu-list{max-width:480px;gap:16px;padding:36px 0 0}
-  .menu-card{height:78px;padding:0 32px;gap:16px;border-radius:50px}
-  .menu-card .card-emoji{width:52px;height:52px;font-size:30px}
-  .menu-card .card-text{font-size:19px}
-  .menu-card .card-sub{font-size:12px}
-  .ed-btn{padding:10px 18px;font-size:15px}
-  .ed-preset{padding:8px 16px;font-size:14px}
-  .ed-sm{width:28px;height:28px;font-size:12px}
-  .ed-num input[type=number]{width:30px;font-size:16px}
-  #galleryScroll{padding:14px}#galleryGrid{gap:6px}
-  .img-num{font-size:12px;padding:2px 7px;top:5px;left:5px}
+  .home-scroll{max-width:520px;padding:40px 24px;}
+  .logo-img{width:140px;height:140px;}
+  .logo-title{font-size:30px;}
+  .menu-card{padding:24px 22px;}.card-icon{width:58px;height:58px;font-size:28px;}
+  .card-title{font-size:18px;}
+  #topBar{padding:8px 16px;gap:6px;}.btn{padding:9px 16px;font-size:14px;}
+  .btn-preset{padding:7px 14px;font-size:13px;}.btn-sm{min-width:32px;min-height:32px;font-size:14px;}
+  .num-ctrl input[type=number]{width:30px;font-size:16px;}
 }
 @media(min-width:1024px){
-  .menu-list{max-width:520px}
-  #galleryScroll{padding:20px;max-width:1100px;margin:0 auto;width:100%}
-  #galleryGrid{gap:8px}
-}
-@media(max-height:400px) and (orientation:landscape){
-  .logo-img{width:100px}
-  .home-header{padding:10px 0 0}
-  .menu-list{gap:8px;padding:12px 0 0}
-  .menu-card{height:48px;padding:0 18px;gap:10px;border-radius:30px}
-  .menu-card .card-emoji{width:32px;height:32px;font-size:18px}
-  .menu-card .card-text{font-size:13px}
-  .menu-card .card-sub{display:none}
-  .nav-bar{padding:6px 10px}
-  #editorBar{padding:4px 8px;gap:3px}
-  .ed-btn{padding:5px 8px;font-size:11px}
-  .ed-preset{padding:4px 8px;font-size:10px}
-  #statusBar{padding:4px 8px;font-size:10px}
+  .menu-grid{max-width:500px;}
+  .home-scroll{max-width:600px;}
 }
 </style>
 </head>
 <body>
 
-<div id="dlProgress">
-  <div class="prog-box">
-    <div class="prog-title">⬇️ 저장 중...</div>
-    <div class="prog-bar-wrap"><div class="prog-bar" id="progBar"></div></div>
-    <div class="prog-text" id="progText">0 / 0</div>
-  </div>
-</div>
-
-<!-- ══ 홈 화면 ══ -->
+<!-- ═══════════ HOME ═══════════ -->
 <div id="screen-home" class="screen active">
   <div class="home-scroll">
-    <div class="home-header">
-      <img class="logo-img" src="https://www.genspark.ai/api/files/s/Kpb4yERZ" alt="젬 있는 세상">
+    <div class="logo-area">
+      <img class="logo-img" src="https://github.com/user-attachments/assets/364738bf-2bc9-49d1-b86c-b69325257320" alt="젬 있는 세상">
+      <div class="logo-title">젬 있는 세상</div>
+      <div class="logo-sub">Google Gem 공유 플랫폼</div>
     </div>
 
-    <div class="menu-list">
-      <button class="menu-card card-purple" onclick="openGem('character')">
-        <div class="card-emoji">🎨</div>
+    <div class="menu-grid">
+      <a class="menu-card" href="https://gemini.google.com/gem/1AJdDfAyaB1x60PV0gjAdSaeBoityoLbB?usp=sharing" target="_blank" rel="noopener">
+        <div class="card-icon char">🎭</div>
         <div class="card-body">
-          <div class="card-text">캐릭터 메이커</div>
-          <div class="card-sub">나만의 캐릭터를 만들어보세요</div>
+          <div class="card-title">캐릭터 메이커</div>
+          <div class="card-desc">AI로 나만의 캐릭터를 만들어 보세요</div>
         </div>
         <div class="card-arrow">›</div>
-      </button>
-
-      <button class="menu-card card-pink" onclick="openGem('emoticon')">
-        <div class="card-emoji">😆</div>
+      </a>
+      <a class="menu-card" href="https://gemini.google.com/gem/1iYKFc8k1AyT5v4kTHuqPHYd1zpIp6zo9?usp=sharing" target="_blank" rel="noopener">
+        <div class="card-icon emoti">😊</div>
         <div class="card-body">
-          <div class="card-text">이모티콘 메이커</div>
-          <div class="card-sub">귀여운 이모티콘을 생성해요</div>
+          <div class="card-title">이모티콘 메이커</div>
+          <div class="card-desc">귀여운 이모티콘을 AI로 제작하세요</div>
         </div>
         <div class="card-arrow">›</div>
-      </button>
-
-      <button class="menu-card card-amber" onclick="goScreen('screen-editor')">
-        <div class="card-emoji">✂️</div>
+      </a>
+      <div class="menu-card" onclick="goScreen('screen-editor')">
+        <div class="card-icon cut">✂️</div>
         <div class="card-body">
-          <div class="card-text">이모티콘 자르기</div>
-          <div class="card-sub">이미지를 분할해서 저장해요</div>
+          <div class="card-title">이모티콘 자르기</div>
+          <div class="card-desc">이미지를 원하는 크기로 분할 저장</div>
         </div>
         <div class="card-arrow">›</div>
-      </button>
+      </div>
     </div>
 
-    <div class="home-footer">✦ 새로운 젬이 계속 추가됩니다 ✦</div>
+    <div class="footer-txt">© 젬 있는 세상 · Google Gem 공유</div>
   </div>
 </div>
 
-<!-- ══ 편집기 화면 ══ -->
+<!-- ═══════════ EDITOR ═══════════ -->
 <div id="screen-editor" class="screen">
-  <div class="nav-bar">
-    <button class="nav-back" onclick="goScreen('screen-home')">←</button>
-    <div class="nav-title">✂️ 이모티콘 자르기</div>
-  </div>
-
-  <div id="editorBar">
-    <div class="ed-row">
-      <button class="ed-btn ed-btn-blue" onclick="openImage()">📂 열기</button>
+  <div id="topBar">
+    <div class="top-row">
+      <button class="btn btn-back" onclick="goScreen('screen-home')">← 홈</button>
+      <button class="btn btn-open" onclick="openImage()">📂 열기</button>
       <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="loadImage(event)">
-      <div class="ed-sep"></div>
-      <span class="ed-lbl">열</span>
-      <div class="ed-num">
-        <button class="ed-sm" onclick="adjustVal('cols',-1)">◀</button>
+      <div class="sep"></div>
+      <span class="lbl">열</span>
+      <div class="num-ctrl">
+        <button class="btn-sm" onclick="adjustVal('cols',-1)">◀</button>
         <input type="number" id="cols" value="4" min="1" max="20" inputmode="numeric">
-        <button class="ed-sm" onclick="adjustVal('cols',1)">▶</button>
+        <button class="btn-sm" onclick="adjustVal('cols',1)">▶</button>
       </div>
-      <span class="ed-lbl">행</span>
-      <div class="ed-num">
-        <button class="ed-sm" onclick="adjustVal('rows',-1)">◀</button>
+      <span class="lbl">행</span>
+      <div class="num-ctrl">
+        <button class="btn-sm" onclick="adjustVal('rows',-1)">◀</button>
         <input type="number" id="rows" value="5" min="1" max="20" inputmode="numeric">
-        <button class="ed-sm" onclick="adjustVal('rows',1)">▶</button>
+        <button class="btn-sm" onclick="adjustVal('rows',1)">▶</button>
       </div>
-      <div class="ed-sep"></div>
-      <button class="ed-btn ed-btn-red" onclick="splitImage()">✂️ 분할</button>
+      <div class="sep"></div>
+      <button class="btn btn-split" onclick="splitImage()">✂️ 분할</button>
     </div>
-    <div class="ed-row">
-      <button class="ed-preset" data-cols="2" data-rows="2" onclick="applyPreset(this)">2×2</button>
-      <button class="ed-preset" data-cols="2" data-rows="3" onclick="applyPreset(this)">2×3</button>
-      <button class="ed-preset" data-cols="3" data-rows="3" onclick="applyPreset(this)">3×3</button>
-      <button class="ed-preset" data-cols="3" data-rows="4" onclick="applyPreset(this)">3×4</button>
-      <button class="ed-preset active" data-cols="4" data-rows="5" onclick="applyPreset(this)">4×5</button>
+    <div class="preset-row">
+      <button class="btn btn-preset" data-c="2" data-r="2" onclick="applyPreset(this)">2×2</button>
+      <button class="btn btn-preset" data-c="2" data-r="3" onclick="applyPreset(this)">2×3</button>
+      <button class="btn btn-preset" data-c="3" data-r="3" onclick="applyPreset(this)">3×3</button>
+      <button class="btn btn-preset" data-c="3" data-r="4" onclick="applyPreset(this)">3×4</button>
+      <button class="btn btn-preset active" data-c="4" data-r="5" onclick="applyPreset(this)">4×5</button>
     </div>
   </div>
 
-  <div id="canvasWrap">
-    <div id="overlay">
-      <div class="icon">🖼️</div>
-      <div class="txt"><strong>이미지를 열거나 드래그</strong>하세요<br>분할해서 이모티콘으로 저장!</div>
-    </div>
+  <div id="canvasArea">
     <canvas id="mainCanvas"></canvas>
+    <div class="overlay" id="overlay">
+      <div class="overlay-icon">🖼️</div>
+      <div class="overlay-msg">📂 열기를 눌러<br>이미지를 불러오세요</div>
+    </div>
   </div>
-  <div id="statusBar">준비 완료 — 이미지를 열어주세요!</div>
+
+  <div id="statusBar">이미지를 불러와 주세요</div>
 </div>
 
-<!-- ══ 갤러리 화면 ══ -->
+<!-- ═══════════ GALLERY ═══════════ -->
 <div id="screen-gallery" class="screen">
-  <div id="galleryHeader">
-    <h2>🖼️ 분할 결과</h2>
-    <span id="saveCount"></span>
+  <div class="gal-header">
+    <div class="gal-title">분할 결과</div>
+    <div class="gal-count" id="saveCount">0 / 0 저장됨</div>
   </div>
-  <div id="galleryScroll">
-    <div id="galleryGrid"></div>
+  <div class="gal-scroll">
+    <div class="gal-grid" id="galGrid"></div>
   </div>
-  <div id="galleryBottom">
-    <button class="ed-btn ed-btn-blue" onclick="goScreen('screen-editor')">← 편집</button>
-    <button class="ed-btn ed-btn-green" onclick="downloadAllSeq()">⬇️ 하나씩 저장</button>
-    <button class="ed-btn ed-btn-amber" onclick="downloadZip()">📦 ZIP 저장</button>
+  <div class="gal-bottom">
+    <button class="btn-gal back" onclick="goScreen('screen-editor')">← 편집</button>
+    <button class="btn-gal home" onclick="goScreen('screen-home')">🏠 홈</button>
+    <button class="btn-gal dl" onclick="downloadAllSeq()">💾 전체 저장</button>
+    <button class="btn-gal zip" onclick="downloadZip()">📦 ZIP 저장</button>
+  </div>
+</div>
+
+<!-- ═══════════ Download Progress ═══════════ -->
+<div id="dlProgress">
+  <div class="dl-box">
+    <div class="dl-text" id="dlText">저장 중...</div>
+    <div class="dl-bar-bg"><div class="dl-bar" id="dlBar" style="width:0%"></div></div>
   </div>
 </div>
 
 <script>
-/* ══ 화면 전환 ══ */
+/* ── globals ── */
+const cv=document.getElementById('mainCanvas'),ctx=cv.getContext('2d');
+const colsIn=document.getElementById('cols'),rowsIn=document.getElementById('rows');
+const overlay=document.getElementById('overlay'),statusBar=document.getElementById('statusBar');
+let origImg=null,scale=1,offX=0,offY=0;
+let linesX=[],linesY=[];
+const SNAP=22;
+let tiles=[],savedSet=new Set(),gridCols=4,gridRows=5;
+
+/* ── screen nav ── */
 function goScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  // 캔버스 리사이즈
-  if(id==='screen-editor'&&origImg){
-    requestAnimationFrame(()=>{fitCanvas();resetLines()});
+  if(id==='screen-editor'&&origImg) setTimeout(()=>{fitCanvas();redraw();},50);
+}
+
+/* ── presets ── */
+function applyPreset(btn){
+  document.querySelectorAll('.btn-preset').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  colsIn.value=btn.dataset.c; rowsIn.value=btn.dataset.r;
+  gridCols=+btn.dataset.c; gridRows=+btn.dataset.r;
+  if(origImg){resetLines();redraw();}
+}
+function adjustVal(id,d){
+  const inp=document.getElementById(id);
+  let v=Math.min(20,Math.max(1,(+inp.value||1)+d));
+  inp.value=v;
+  if(id==='cols')gridCols=v; else gridRows=v;
+  syncPreset();
+  if(origImg){resetLines();redraw();}
+}
+function syncPreset(){
+  document.querySelectorAll('.btn-preset').forEach(b=>{
+    b.classList.toggle('active',+b.dataset.c===gridCols&&+b.dataset.r===gridRows);
+  });
+}
+colsIn.addEventListener('change',()=>{gridCols=Math.min(20,Math.max(1,+colsIn.value||1));colsIn.value=gridCols;syncPreset();if(origImg){resetLines();redraw();}});
+rowsIn.addEventListener('change',()=>{gridRows=Math.min(20,Math.max(1,+rowsIn.value||1));rowsIn.value=gridRows;syncPreset();if(origImg){resetLines();redraw();}});
+
+/* ── image load ── */
+function openImage(){document.getElementById('fileInput').click();}
+function loadImage(e){const f=e.target.files[0];if(f)readFile(f);}
+function readFile(f){
+  const r=new FileReader();
+  r.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{origImg=img;overlay.style.display='none';fitCanvas();resetLines();redraw();
+      statusBar.textContent=`${img.naturalWidth} × ${img.naturalHeight} px`;};
+    img.src=ev.target.result;
+  };r.readAsDataURL(f);
+}
+
+/* ── canvas fit ── */
+let resizeTimer;
+function fitCanvas(){
+  if(!origImg)return;
+  const area=document.getElementById('canvasArea');
+  const W=area.clientWidth,H=area.clientHeight;
+  scale=Math.min(W/origImg.naturalWidth,H/origImg.naturalHeight,.95);
+  const cw=Math.round(origImg.naturalWidth*scale),ch=Math.round(origImg.naturalHeight*scale);
+  cv.width=cw;cv.height=ch;
+  offX=(W-cw)/2;offY=(H-ch)/2;
+  cv.style.marginLeft=offX+'px';cv.style.marginTop=offY+'px';
+}
+window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(origImg){fitCanvas();redraw();}},150);});
+
+/* ── grid lines ── */
+function resetLines(){
+  linesX=[];linesY=[];
+  for(let i=1;i<gridCols;i++) linesX.push(Math.round(origImg.naturalWidth*i/gridCols*scale));
+  for(let i=1;i<gridRows;i++) linesY.push(Math.round(origImg.naturalHeight*i/gridRows*scale));
+}
+
+/* ── draw ── */
+function redraw(){
+  if(!origImg)return;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.drawImage(origImg,0,0,cv.width,cv.height);
+  ctx.strokeStyle='rgba(255,80,80,.8)';ctx.lineWidth=2;
+  linesX.forEach(x=>{ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,cv.height);ctx.stroke();});
+  linesY.forEach(y=>{ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cv.width,y);ctx.stroke();});
+  /* numbers */
+  const xs=[0,...linesX,cv.width],ys=[0,...linesY,cv.height];
+  let n=1;
+  ctx.font=`bold ${Math.max(11,Math.min(20,cv.width/gridCols/3))}px sans-serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  for(let r=0;r<ys.length-1;r++) for(let c=0;c<xs.length-1;c++){
+    const cx=(xs[c]+xs[c+1])/2,cy=(ys[r]+ys[r+1])/2;
+    ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(cx-14,cy-10,28,20);
+    ctx.fillStyle='#fff';ctx.fillText(n++,cx,cy);
   }
 }
 
-/* ══ 외부 Gem ══ */
-const GEM_URLS={
-  character:'https://gemini.google.com/gem/1AJdDfAyaB1x60PV0gjAdSaeBoityoLbB?usp=sharing',
-  emoticon:'https://gemini.google.com/gem/1iYKFc8k1AyT5v4kTHuqPHYd1zpIp6zo9?usp=sharing',
-};
-function openGem(key){window.open(GEM_URLS[key],'_blank')}
-
-/* ══ 편집기 ══ */
-const canvas=document.getElementById('mainCanvas');
-const ctx=canvas.getContext('2d');
-const wrap=document.getElementById('canvasWrap');
-const statusEl=document.getElementById('statusBar');
-const overlay=document.getElementById('overlay');
-
-let origImg=null,scale=1,offsetX=0,offsetY=0,dispW=0,dispH=0;
-let hLines=[],vLines=[],dragging=null;
-const SNAP=22;
-let tiles=[],savedSet=new Set();
-let gridCols=4,gridRows=5;
-let isDownloading=false;
-
-function applyPreset(btn){
-  document.getElementById('cols').value=btn.dataset.cols;
-  document.getElementById('rows').value=btn.dataset.rows;
-  document.querySelectorAll('.ed-preset').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');resetLines();
-}
-function adjustVal(id,delta){
-  const inp=document.getElementById(id);
-  inp.value=Math.max(1,Math.min(20,(parseInt(inp.value)||1)+delta));
-  syncPreset();resetLines();
-}
-function syncPreset(){
-  const c=parseInt(document.getElementById('cols').value)||0;
-  const r=parseInt(document.getElementById('rows').value)||0;
-  document.querySelectorAll('.ed-preset').forEach(btn=>{
-    btn.classList.toggle('active',parseInt(btn.dataset.cols)===c&&parseInt(btn.dataset.rows)===r);
-  });
-}
-
-function openImage(){document.getElementById('fileInput').click()}
-function loadImage(e){readFile(e.target.files[0]);e.target.value=''}
-function readFile(file){
-  if(!file||!file.type.startsWith('image/'))return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    const img=new Image();
-    img.onload=()=>{
-      origImg=img;overlay.style.display='none';
-      fitCanvas();resetLines();
-      setStatus(`${img.width}×${img.height}px — 선을 드래그해서 조정!`);
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-wrap.addEventListener('dragover',e=>e.preventDefault());
-wrap.addEventListener('drop',e=>{e.preventDefault();readFile(e.dataTransfer.files[0])});
-
-function fitCanvas(){
-  const pad=8,maxW=wrap.clientWidth-pad*2,maxH=wrap.clientHeight-pad*2;
-  if(!origImg||maxW<=0||maxH<=0)return;
-  scale=Math.min(maxW/origImg.width,maxH/origImg.height,1);
-  dispW=Math.floor(origImg.width*scale);dispH=Math.floor(origImg.height*scale);
-  canvas.width=wrap.clientWidth;canvas.height=wrap.clientHeight;
-  offsetX=Math.floor((canvas.width-dispW)/2);offsetY=Math.floor((canvas.height-dispH)/2);
-}
-function resetLines(){
-  if(!origImg)return;
-  const cols=parseInt(document.getElementById('cols').value)||4;
-  const rows=parseInt(document.getElementById('rows').value)||5;
-  vLines=Array.from({length:cols-1},(_,i)=>offsetX+Math.floor(dispW*(i+1)/cols));
-  hLines=Array.from({length:rows-1},(_,i)=>offsetY+Math.floor(dispH*(i+1)/rows));
-  redraw();
-}
-function redraw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(!origImg)return;
-  ctx.drawImage(origImg,offsetX,offsetY,dispW,dispH);
-  ctx.strokeStyle='#ccc';ctx.lineWidth=1;
-  ctx.strokeRect(offsetX,offsetY,dispW,dispH);
-  ctx.lineWidth=2;ctx.setLineDash([8,4]);
-  ctx.strokeStyle='#40a0e0';
-  hLines.forEach(y=>{ctx.beginPath();ctx.moveTo(offsetX,y);ctx.lineTo(offsetX+dispW,y);ctx.stroke()});
-  ctx.strokeStyle='#f0a830';
-  vLines.forEach(x=>{ctx.beginPath();ctx.moveTo(x,offsetY);ctx.lineTo(x,offsetY+dispH);ctx.stroke()});
-  ctx.setLineDash([]);
-  const aY=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
-  const aX=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
-  const fs=Math.max(9,Math.min(13,Math.min(dispW/aX.length/3,dispH/aY.length/3)));
-  ctx.font=`bold ${fs}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
-  let n=1;
-  for(let r=0;r<aY.length-1;r++)
-    for(let c=0;c<aX.length-1;c++){
-      const mx=(aX[c]+aX[c+1])/2,my=(aY[r]+aY[r+1])/2;
-      ctx.fillStyle='rgba(123,79,191,.7)';
-      ctx.beginPath();ctx.arc(mx,my,fs*1.15,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle='#fff';ctx.fillText(n++,mx,my);
-    }
-}
-
-function findLine(x,y){
-  for(let i=0;i<hLines.length;i++) if(Math.abs(y-hLines[i])<SNAP) return{type:'h',index:i};
-  for(let i=0;i<vLines.length;i++) if(Math.abs(x-vLines[i])<SNAP) return{type:'v',index:i};
+/* ── drag lines ── */
+let dragLine=null;
+function findLine(px,py){
+  for(let i=0;i<linesX.length;i++) if(Math.abs(px-linesX[i])<SNAP) return{axis:'x',idx:i};
+  for(let i=0;i<linesY.length;i++) if(Math.abs(py-linesY[i])<SNAP) return{axis:'y',idx:i};
   return null;
 }
-function moveLine(x,y){
-  if(!dragging)return;
-  if(dragging.type==='h') hLines[dragging.index]=Math.max(offsetY+4,Math.min(y,offsetY+dispH-4));
-  else vLines[dragging.index]=Math.max(offsetX+4,Math.min(x,offsetX+dispW-4));
+function evPos(e){const r=cv.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top};}
+cv.addEventListener('mousedown',e=>{dragLine=findLine(...Object.values(evPos(e)));});
+cv.addEventListener('touchstart',e=>{dragLine=findLine(...Object.values(evPos(e)));},{passive:true});
+function moveLine(e){
+  if(!dragLine)return;
+  const p=evPos(e);
+  if(dragLine.axis==='x') linesX[dragLine.idx]=Math.max(4,Math.min(cv.width-4,p.x));
+  else linesY[dragLine.idx]=Math.max(4,Math.min(cv.height-4,p.y));
   redraw();
 }
-function getXY(e){const r=canvas.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]}
+cv.addEventListener('mousemove',moveLine);
+cv.addEventListener('touchmove',e=>{e.preventDefault();moveLine(e);},{passive:false});
+window.addEventListener('mouseup',()=>{dragLine=null;});
+window.addEventListener('touchend',()=>{dragLine=null;});
 
-canvas.addEventListener('mousedown',e=>{dragging=findLine(...getXY(e))});
-canvas.addEventListener('mousemove',e=>{
-  const[x,y]=getXY(e);
-  if(dragging){moveLine(x,y);return}
-  const f=findLine(x,y);
-  canvas.style.cursor=f?(f.type==='h'?'ns-resize':'ew-resize'):'crosshair';
-});
-canvas.addEventListener('mouseup',()=>dragging=null);
-canvas.addEventListener('mouseleave',()=>dragging=null);
-canvas.addEventListener('touchstart',e=>{
-  e.preventDefault();const t=e.touches[0],r=canvas.getBoundingClientRect();
-  dragging=findLine(t.clientX-r.left,t.clientY-r.top);
-},{passive:false});
-canvas.addEventListener('touchmove',e=>{
-  e.preventDefault();const t=e.touches[0],r=canvas.getBoundingClientRect();
-  moveLine(t.clientX-r.left,t.clientY-r.top);
-},{passive:false});
-canvas.addEventListener('touchend',()=>dragging=null);
-
+/* ── split ── */
 function splitImage(){
-  if(!origImg){alert('이미지를 먼저 열어주세요!');return}
-  gridCols=parseInt(document.getElementById('cols').value)||4;
-  gridRows=parseInt(document.getElementById('rows').value)||5;
-  const aYc=[offsetY,...hLines.slice().sort((a,b)=>a-b),offsetY+dispH];
-  const aXc=[offsetX,...vLines.slice().sort((a,b)=>a-b),offsetX+dispW];
-  const toX=cx=>Math.round((cx-offsetX)/scale),toY=cy=>Math.round((cy-offsetY)/scale);
-  const aY=aYc.map(toY),aX=aXc.map(toX);
-  const tmp=document.createElement('canvas'),tc=tmp.getContext('2d');
-  tiles=[];
-  for(let r=0;r<aY.length-1;r++)
-    for(let c=0;c<aX.length-1;c++){
-      const x=Math.max(0,aX[c]),y=Math.max(0,aY[r]);
-      const w=Math.min(origImg.width,aX[c+1])-x;
-      const h=Math.min(origImg.height,aY[r+1])-y;
-      if(w<=0||h<=0)continue;
-      tmp.width=w;tmp.height=h;tc.clearRect(0,0,w,h);
-      tc.drawImage(origImg,x,y,w,h,0,0,w,h);
-      tiles.push({url:tmp.toDataURL('image/png'),w,h});
-    }
-  savedSet=new Set();
+  if(!origImg)return;
+  tiles=[];savedSet.clear();
+  const xs=[0,...linesX.map(v=>v/scale*origImg.naturalWidth/cv.width*cv.width/scale),origImg.naturalWidth];
+  const ys=[0,...linesY.map(v=>v/scale*origImg.naturalHeight/cv.height*cv.height),origImg.naturalHeight];
+  /* recalc from real coords */
+  const rxs=[0,...linesX.map(v=>Math.round(v/cv.width*origImg.naturalWidth)),origImg.naturalWidth];
+  const rys=[0,...linesY.map(v=>Math.round(v/cv.height*origImg.naturalHeight)),origImg.naturalHeight];
+  for(let r=0;r<rys.length-1;r++) for(let c=0;c<rxs.length-1;c++){
+    const sx=rxs[c],sy=rys[r],sw=rxs[c+1]-rxs[c],sh=rys[r+1]-rys[r];
+    const tc=document.createElement('canvas');tc.width=sw;tc.height=sh;
+    tc.getContext('2d').drawImage(origImg,sx,sy,sw,sh,0,0,sw,sh);
+    tiles.push(tc.toDataURL('image/png'));
+  }
   goScreen('screen-gallery');
   buildGallery();
 }
 
+/* ── gallery ── */
 function buildGallery(){
-  const grid=document.getElementById('galleryGrid');
+  const grid=document.getElementById('galGrid');
   grid.innerHTML='';
   grid.style.gridTemplateColumns=`repeat(${gridCols},1fr)`;
-  tiles.forEach((tile,i)=>{
-    const item=document.createElement('div');
-    item.className='img-item';item.id=`img-${i}`;
-    item.innerHTML=`
-      <img src="${tile.url}" loading="lazy" alt="${i+1}">
-      <div class="img-num">${i+1}</div>
-      <div class="img-hint">탭→저장</div>
-      <div class="img-saved"><span>✅</span></div>`;
-    item.addEventListener('click',()=>downloadOne(i));
-    grid.appendChild(item);
+  tiles.forEach((src,i)=>{
+    const img=document.createElement('img');img.src=src;img.loading='lazy';
+    img.onclick=()=>downloadOne(i);
+    grid.appendChild(img);
   });
   updateSaveCount();
-  document.getElementById('galleryScroll').scrollTop=0;
+}
+function updateSaveCount(){
+  document.getElementById('saveCount').textContent=`${savedSet.size} / ${tiles.length} 저장됨`;
+  document.querySelectorAll('#galGrid img').forEach((img,i)=>{
+    img.classList.toggle('saved',savedSet.has(i));
+  });
 }
 
+/* ── download helpers ── */
 function dataURLtoBlob(dataURL){
   const arr=dataURL.split(','),mime=arr[0].match(/:(.*?);/)[1];
-  const bstr=atob(arr[1]);let n=bstr.length;const u8=new Uint8Array(n);
-  while(n--)u8[n]=bstr.charCodeAt(n);
-  return new Blob([u8],{type:mime});
+  const b=atob(arr[1]),ab=new ArrayBuffer(b.length),ia=new Uint8Array(ab);
+  for(let i=0;i<b.length;i++) ia[i]=b.charCodeAt(i);
+  return new Blob([ab],{type:mime});
 }
-
 function downloadOne(i){
-  const blob=dataURLtoBlob(tiles[i].url);
+  const blob=dataURLtoBlob(tiles[i]);
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;a.download=`emoticon_${String(i+1).padStart(2,'0')}.png`;
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(url),1000);
-  savedSet.add(i);
-  document.getElementById(`img-${i}`).classList.add('saved');
-  updateSaveCount();
+  savedSet.add(i);updateSaveCount();
 }
 
-async function downloadAllSeq(){
-  if(isDownloading)return;isDownloading=true;
-  const prog=document.getElementById('dlProgress');
-  const bar=document.getElementById('progBar');
-  const txt=document.getElementById('progText');
-  prog.style.display='flex';const total=tiles.length;
-  for(let i=0;i<total;i++){
-    bar.style.width=`${((i+1)/total)*100}%`;
-    txt.textContent=`${i+1} / ${total}`;
-    downloadOne(i);await new Promise(r=>setTimeout(r,800));
+/* ── sequential download ── */
+function downloadAllSeq(){
+  const prog=document.getElementById('dlProgress'),txt=document.getElementById('dlText'),bar=document.getElementById('dlBar');
+  prog.classList.add('show');let idx=0;
+  function next(){
+    if(idx>=tiles.length){prog.classList.remove('show');updateSaveCount();return;}
+    txt.textContent=`저장 중... ${idx+1} / ${tiles.length}`;
+    bar.style.width=((idx+1)/tiles.length*100)+'%';
+    downloadOne(idx);idx++;
+    setTimeout(next,800);
   }
-  txt.textContent='완료!';
-  await new Promise(r=>setTimeout(r,600));
-  prog.style.display='none';isDownloading=false;
+  next();
 }
 
-async function downloadZip(){
-  if(isDownloading)return;isDownloading=true;
-  const prog=document.getElementById('dlProgress');
-  const bar=document.getElementById('progBar');
-  const txt=document.getElementById('progText');
-  prog.style.display='flex';bar.style.width='0%';
-  txt.textContent='ZIP 준비 중...';
+/* ── ZIP download ── */
+function downloadZip(){
+  const prog=document.getElementById('dlProgress'),txt=document.getElementById('dlText'),bar=document.getElementById('dlBar');
+  prog.classList.add('show');txt.textContent='ZIP 준비 중...';bar.style.width='0%';
+  function doZip(){
+    const zip=new JSZip();
+    tiles.forEach((d,i)=>{
+      const b64=d.split(',')[1];
+      zip.file(`emoticon_${String(i+1).padStart(2,'0')}.png`,b64,{base64:true});
+    });
+    zip.generateAsync({type:'blob'},meta=>{
+      bar.style.width=meta.percent.toFixed(0)+'%';
+      txt.textContent=`압축 중... ${meta.percent.toFixed(0)}%`;
+    }).then(blob=>{
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download='emoticons.zip';
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+      tiles.forEach((_,i)=>savedSet.add(i));
+      updateSaveCount();prog.classList.remove('show');
+    });
+  }
   if(typeof JSZip==='undefined'){
-    try{
-      await new Promise((resolve,reject)=>{
-        const s=document.createElement('script');
-        s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-        s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
-      });
-    }catch(e){
-      alert('ZIP 라이브러리를 불러올 수 없습니다.\n네트워크 연결을 확인해주세요.');
-      prog.style.display='none';isDownloading=false;return;
-    }
-  }
-  const zip=new JSZip();const total=tiles.length;
-  for(let i=0;i<total;i++){
-    zip.file(`emoticon_${String(i+1).padStart(2,'0')}.png`,dataURLtoBlob(tiles[i].url));
-    bar.style.width=`${((i+1)/total)*70}%`;
-    txt.textContent=`압축 중 ${i+1}/${total}`;
-  }
-  txt.textContent='ZIP 생성 중...';bar.style.width='85%';
-  const content=await zip.generateAsync({type:'blob'},meta=>{
-    bar.style.width=`${85+meta.percent*0.15}%`;
-  });
-  bar.style.width='100%';txt.textContent='다운로드 중...';
-  const url=URL.createObjectURL(content);
-  const a=document.createElement('a');
-  a.href=url;a.download='emoticons.zip';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(url),3000);
-  tiles.forEach((_,i)=>{savedSet.add(i);document.getElementById(`img-${i}`).classList.add('saved')});
-  updateSaveCount();
-  txt.textContent='완료!';
-  await new Promise(r=>setTimeout(r,600));
-  prog.style.display='none';isDownloading=false;
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+    s.onload=doZip;document.head.appendChild(s);
+  }else doZip();
 }
 
-function updateSaveCount(){
-  const total=tiles.length,saved=savedSet.size;
-  document.getElementById('saveCount').textContent=
-    saved===0?`${total}장 — 탭하면 저장!`:
-    saved===total?'🎉 전체 저장 완료!':`${saved}/${total} 저장됨`;
-}
-function setStatus(msg){statusEl.textContent=msg}
-
-let resizeTimer;
-window.addEventListener('resize',()=>{
-  clearTimeout(resizeTimer);
-  resizeTimer=setTimeout(()=>{
-    if(!origImg)return;
-    if(document.getElementById('screen-editor').classList.contains('active')){
-      fitCanvas();resetLines();
-    }
-  },150);
-});
-document.getElementById('cols').addEventListener('input',()=>{syncPreset();resetLines()});
-document.getElementById('rows').addEventListener('input',()=>{syncPreset();resetLines()});
+function setStatus(t){statusBar.textContent=t;}
 </script>
 </body>
 </html>
